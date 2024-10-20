@@ -1,17 +1,6 @@
-#if UNITY_EDITOR
-// Unity C# reference source
-// https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/Inspector/UnityEventDrawer.cs
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
+namespace UnityProject.Editor;
 using System.Reflection;
 using System.Text;
-using UnityEngine;
-using UnityEditor;
-using UnityEngine.Events;
-using UnityEditorInternal;
-using Object = UnityEngine.Object;
 
 [CustomPropertyDrawer(typeof(UnityEventBase), true)]
 public class UnityEventCompactDrawer : PropertyDrawer
@@ -23,27 +12,28 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		public int lastSelectedIndex;
 	}
 
-	static MethodInfo BuildPopupList = typeof(UnityEventDrawer).GetMethod("BuildPopupList", BindingFlags.Static | BindingFlags.NonPublic);
-	static MethodInfo GetEventParams = typeof(UnityEventDrawer).GetMethod("GetEventParams", BindingFlags.Static | BindingFlags.NonPublic);
-	static MethodInfo GetDummyEvent = typeof(UnityEventDrawer).GetMethod("GetDummyEvent", BindingFlags.Static | BindingFlags.NonPublic);
+	private static readonly MethodInfo BuildPopupList = typeof(UnityEventDrawer).GetMethod("BuildPopupList", BindingFlags.Static | BindingFlags.NonPublic);
+	private static readonly MethodInfo GetEventParams = typeof(UnityEventDrawer).GetMethod("GetEventParams", BindingFlags.Static | BindingFlags.NonPublic);
+	private static readonly MethodInfo GetDummyEvent = typeof(UnityEventDrawer).GetMethod("GetDummyEvent", BindingFlags.Static | BindingFlags.NonPublic);
+	private static GUIStyle foldoutHeader;
 
-	static GUIStyle foldoutHeader;
+	private static float VerticalSpacing
+		=> EditorGUIUtility.standardVerticalSpacing;
 
-	static float VerticalSpacing => EditorGUIUtility.standardVerticalSpacing;
-	static float Spacing => 3;
+	private const float Spacing = 3;
 
-	static readonly GUIContent DropdownIcon = EditorGUIUtility.IconContent("icon dropdown");
-	static readonly GUIContent MixedValueContent = EditorGUIUtility.TrTextContent("—", "Mixed Values");
-	static readonly GUIContent TempContent = new GUIContent();
+	private static readonly GUIContent DropdownIcon = EditorGUIUtility.IconContent("icon dropdown");
+	private static readonly GUIContent MixedValueContent = EditorGUIUtility.TrTextContent("—", "Mixed Values");
+	private static readonly GUIContent TempContent = new();
 
 	private const string kNoFunctionString = "No Function";
 
 	//Persistent Listener Paths
-	internal const string kInstancePath = "m_Target";
-	internal const string kCallStatePath = "m_CallState";
-	internal const string kArgumentsPath = "m_Arguments";
-	internal const string kModePath = "m_Mode";
-	internal const string kMethodNamePath = "m_MethodName";
+	private const string kInstancePath = "m_Target";
+	private const string kCallStatePath = "m_CallState";
+	private const string kArgumentsPath = "m_Arguments";
+	private const string kModePath = "m_Mode";
+	private const string kMethodNamePath = "m_MethodName";
 
 	//ArgumentCache paths
 	internal const string kFloatArgument = "m_FloatArgument";
@@ -52,31 +42,26 @@ public class UnityEventCompactDrawer : PropertyDrawer
 	internal const string kStringArgument = "m_StringArgument";
 	internal const string kBoolArgument = "m_BoolArgument";
 	internal const string kObjectArgumentAssemblyTypeName = "m_ObjectArgumentAssemblyTypeName";
-
-	string m_Text;
-	UnityEventBase m_DummyEvent;
-	SerializedProperty m_Prop;
-	SerializedProperty m_ListenersArray;
-
-	const int kExtraSpacing = 2;
+	private string m_Text;
+	private UnityEventBase m_DummyEvent;
+	private SerializedProperty m_Prop;
+	private SerializedProperty m_ListenersArray;
+	private const int kExtraSpacing = 2;
 
 	//State:
-	ReorderableList m_ReorderableList;
-	int m_LastSelectedIndex;
-	State currentState;
-	Dictionary<string, State> m_States = new Dictionary<string, State>();
-
+	private ReorderableList m_ReorderableList;
+	private int m_LastSelectedIndex;
+	private State currentState;
+	private readonly Dictionary<string, State> m_States = new();
 
 	private State GetState(SerializedProperty prop)
 	{
-		State state;
 		string key = prop.propertyPath;
-		m_States.TryGetValue(key, out state);
+		m_States.TryGetValue(key, out State state);
 		// ensure the cached SerializedProperty is synchronized (case 974069)
 		if (state == null || state.m_ReorderableList.serializedProperty.serializedObject != prop.serializedObject)
 		{
-			if (state == null)
-				state = new State();
+			state ??= new State();
 
 			SerializedProperty listenersArray = prop.FindPropertyRelative("m_PersistentCalls.m_Calls");
 			state.m_ReorderableList =
@@ -101,19 +86,17 @@ public class UnityEventCompactDrawer : PropertyDrawer
 
 		return state;
 	}
-
-	void DrawElementBackground(Rect rect, int index, bool active, bool focused)
+	private void DrawElementBackground(Rect rect, int index, bool active, bool focused)
 	{
-		var isPro = EditorGUIUtility.isProSkin;
-		var color = GUI.color;
+		bool isPro = EditorGUIUtility.isProSkin;
+		Color color = GUI.color;
 
 		// Dark-blue color in Light theme looks super ugly with reorderable lists :(
-		focused = isPro ? focused : false;
+		focused = isPro && focused;
 
 		ReorderableList.defaultBehaviours.DrawElementBackground(rect, index, active, focused, true);
 		GUI.color = color;
 	}
-
 	private State RestoreState(SerializedProperty property)
 	{
 		State state = GetState(property);
@@ -125,7 +108,6 @@ public class UnityEventCompactDrawer : PropertyDrawer
 
 		return state;
 	}
-
 	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 	{
 		m_Prop = property;
@@ -137,7 +119,6 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		OnGUI(position);
 		currentState.lastSelectedIndex = m_LastSelectedIndex;
 	}
-
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
 		RestoreState(property);
@@ -154,7 +135,6 @@ public class UnityEventCompactDrawer : PropertyDrawer
 
 		return height + VerticalSpacing;
 	}
-
 	public void OnGUI(Rect rect)
 	{
 		if (m_ListenersArray == null || !m_ListenersArray.isArray)
@@ -169,16 +149,16 @@ public class UnityEventCompactDrawer : PropertyDrawer
 			if (ReorderableList.defaultBehaviours == null)
 				m_ReorderableList.DoList(Rect.zero);
 
-			var oldIndent = EditorGUI.indentLevel;
+			int oldIndent = EditorGUI.indentLevel;
 			EditorGUI.indentLevel = 0;
 
 			rect.xMin += 8 * oldIndent;
 
-			var headerRect = new Rect(rect.x, rect.y, rect.width, 18);
-			var listRect = new Rect(rect) { yMin = headerRect.yMax };
+			Rect headerRect = new(rect.x, rect.y, rect.width, 18);
+			Rect listRect = new(rect) { yMin = headerRect.yMax };
 
 			ReorderableList.defaultBehaviours.DrawHeaderBackground(headerRect);
-			var isExpanded = DrawListHeader(headerRect, m_ReorderableList);
+			bool isExpanded = DrawListHeader(headerRect, m_ReorderableList);
 
 			if (isExpanded)
 			{
@@ -192,65 +172,63 @@ public class UnityEventCompactDrawer : PropertyDrawer
 			EditorGUI.indentLevel = oldIndent;
 		}
 	}
-
 	protected virtual bool DrawListHeader(Rect rect, ReorderableList list)
 	{
 		const int sizeWidth = 24;
 		const int buttonsWidth = 54;
 
-		var property = list.serializedProperty;
+		SerializedProperty property = list.serializedProperty;
 
 		rect.xMin += 16;
 		rect.yMin += 1;
 		rect.height = EditorGUIUtility.singleLineHeight;
 
-		var foldoutRect = new Rect(rect);
+		Rect foldoutRect = new(rect);
 		foldoutRect.width -= buttonsWidth + sizeWidth;
 		foldoutRect.height -= 1;
 
-		if (foldoutHeader == null)
-			foldoutHeader = new GUIStyle(EditorStyles.foldoutHeader)
-			{
-				richText = true,
-				fontStyle = FontStyle.Normal,
-				clipping = TextClipping.Clip,
-				fixedHeight = 0,
-				padding = new RectOffset(14, 5, 2, 2),
-			};
+		foldoutHeader ??= new GUIStyle(EditorStyles.foldoutHeader)
+		{
+			richText = true,
+			fontStyle = FontStyle.Normal,
+			clipping = TextClipping.Clip,
+			fixedHeight = 0,
+			padding = new RectOffset(14, 5, 2, 2),
+		};
 
 		// Header
 		{
-			var eventParams = (string)GetEventParams.Invoke(null, new[] { m_DummyEvent });
-			var hex = EditorGUIUtility.isProSkin ? "ffffff" : "000000";
-			var text = (string.IsNullOrEmpty(m_Text) ? "Event" : m_Text) + $"<color=#{hex}70>{eventParams}</color>";
+			string eventParams = (string)GetEventParams.Invoke(null, new[] { m_DummyEvent });
+			string hex = EditorGUIUtility.isProSkin ? "ffffff" : "000000";
+			string text = (string.IsNullOrEmpty(m_Text) ? "Event" : m_Text) + $"<color=#{hex}70>{eventParams}</color>";
 
 			property.isExpanded = EditorGUI.BeginFoldoutHeaderGroup(foldoutRect, property.isExpanded, text, foldoutHeader);
 			EditorGUI.EndFoldoutHeaderGroup();
 		}
 
-		var sizeRect = new Rect(rect) { x = foldoutRect.xMax, width = sizeWidth };
+		Rect sizeRect = new(rect) { x = foldoutRect.xMax, width = sizeWidth };
 		sizeRect.yMin += 1;
 		sizeRect.height -= 1;
 
 		// Size field
 		{
 			EditorGUI.BeginChangeCheck();
-			var numberField = EditorStyles.numberField;
+			GUIStyle numberField = EditorStyles.numberField;
 			numberField.contentOffset = new Vector2(0, -1);
 
-			var arraySize = EditorGUI.IntField(sizeRect, property.arraySize);
+			int arraySize = EditorGUI.IntField(sizeRect, property.arraySize);
 
 			numberField.contentOffset = Vector2.zero;
 			if (EditorGUI.EndChangeCheck())
 				property.arraySize = arraySize;
 		}
 
-		var footerRect = new Rect(rect) { x = sizeRect.xMax + 12, width = buttonsWidth };
+		Rect footerRect = new(rect) { x = sizeRect.xMax + 12, width = buttonsWidth };
 		footerRect.yMin += 1;
 
 		// Footer buttons
 		{
-			var footerBg = ReorderableList.defaultBehaviours.footerBackground;
+			GUIStyle footerBg = ReorderableList.defaultBehaviours.footerBackground;
 			footerBg.fixedHeight = 0.01f;
 
 			ReorderableList.defaultBehaviours.DrawFooter(footerRect, list);
@@ -260,35 +238,28 @@ public class UnityEventCompactDrawer : PropertyDrawer
 
 		return property.isExpanded;
 	}
-
-	static PersistentListenerMode GetMode(SerializedProperty mode)
-	{
-		return (PersistentListenerMode)mode.enumValueIndex;
-	}
-
-	float OnGetElementHeight(int index)
+	private static PersistentListenerMode GetMode(SerializedProperty mode) => (PersistentListenerMode)mode.enumValueIndex;
+	private float OnGetElementHeight(int index)
 	{
 		if (m_ReorderableList == null)
 			return 0;
 
-		var element = m_ListenersArray.GetArrayElementAtIndex(index);
+		SerializedProperty element = m_ListenersArray.GetArrayElementAtIndex(index);
 
-		var mode = element.FindPropertyRelative(kModePath);
-		var modeEnum = GetMode(mode);
+		SerializedProperty mode = element.FindPropertyRelative(kModePath);
+		PersistentListenerMode modeEnum = GetMode(mode);
 
-		var spacing = VerticalSpacing + kExtraSpacing;
+		float spacing = VerticalSpacing + kExtraSpacing;
 
-		if (modeEnum == PersistentListenerMode.Object || (modeEnum != PersistentListenerMode.Void && modeEnum != PersistentListenerMode.EventDefined))
-			return EditorGUIUtility.singleLineHeight * 2 + VerticalSpacing + spacing;
-
-		return EditorGUIUtility.singleLineHeight + spacing;
+		return modeEnum is PersistentListenerMode.Object or not PersistentListenerMode.Void and not PersistentListenerMode.EventDefined
+			? EditorGUIUtility.singleLineHeight * 2 + VerticalSpacing + spacing
+			: EditorGUIUtility.singleLineHeight + spacing;
 	}
-
 	protected virtual void DrawEvent(Rect rect, int index, bool isActive, bool isFocused)
 	{
-		var pListener = m_ListenersArray.GetArrayElementAtIndex(index);
+		SerializedProperty pListener = m_ListenersArray.GetArrayElementAtIndex(index);
 
-		var contentRect = rect;
+		Rect contentRect = rect;
 		contentRect.xMin -= 6;
 		contentRect.xMax += 2;
 		contentRect.y += 1;
@@ -300,34 +271,34 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		Rect argRect = subRects[3];
 
 		// find the current event target...
-		var callState = pListener.FindPropertyRelative(kCallStatePath);
-		var mode = pListener.FindPropertyRelative(kModePath);
-		var arguments = pListener.FindPropertyRelative(kArgumentsPath);
-		var listenerTarget = pListener.FindPropertyRelative(kInstancePath);
-		var methodName = pListener.FindPropertyRelative(kMethodNamePath);
+		SerializedProperty callState = pListener.FindPropertyRelative(kCallStatePath);
+		SerializedProperty mode = pListener.FindPropertyRelative(kModePath);
+		SerializedProperty arguments = pListener.FindPropertyRelative(kArgumentsPath);
+		SerializedProperty listenerTarget = pListener.FindPropertyRelative(kInstancePath);
+		SerializedProperty methodName = pListener.FindPropertyRelative(kMethodNamePath);
 
 		Color c = GUI.backgroundColor;
 		GUI.backgroundColor = Color.white;
 
-		var callStateEnum = (UnityEventCallState)callState.enumValueIndex;
-		var isEditorAndRuntime = callStateEnum == UnityEventCallState.EditorAndRuntime;
-		var isRuntime = callStateEnum == UnityEventCallState.RuntimeOnly;
+		UnityEventCallState callStateEnum = (UnityEventCallState)callState.enumValueIndex;
+		bool isEditorAndRuntime = callStateEnum == UnityEventCallState.EditorAndRuntime;
+		bool isRuntime = callStateEnum == UnityEventCallState.RuntimeOnly;
 
-		var toggleRect = enabledRect;
+		Rect toggleRect = enabledRect;
 		toggleRect.width = 16;
 
-		if (isEditorAndRuntime || (isRuntime && Application.isPlaying))
+		if (isEditorAndRuntime || isRuntime && Application.isPlaying)
 		{
-			var markRect = new Rect(rect) { width = 2 };
+			Rect markRect = new(rect) { width = 2 };
 			markRect.x -= 20;
 			EditorGUI.DrawRect(markRect, new Color(1, 0.7f, 0.4f, 1));
 		}
 
-		var evt = Event.current;
-		var color = GUI.color;
-		var mousePos = evt.mousePosition;
+		Event evt = Event.current;
+		Color color = GUI.color;
+		Vector2 mousePos = evt.mousePosition;
 		{
-			var isHover = toggleRect.Contains(mousePos);
+			bool isHover = toggleRect.Contains(mousePos);
 			if (isHover)
 			{
 				// Ooh, these beautiful 2-pixels of rounded edges..
@@ -343,8 +314,7 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		EditorGUI.PropertyField(toggleRect, callState, GUIContent.none);
 		GUI.color = color;
 
-
-		var isOff = callStateEnum == UnityEventCallState.Off;
+		bool isOff = callStateEnum == UnityEventCallState.Off;
 		EditorGUI.BeginDisabledGroup(isOff);
 
 		EditorGUI.BeginChangeCheck();
@@ -355,50 +325,34 @@ public class UnityEventCompactDrawer : PropertyDrawer
 				methodName.stringValue = null;
 		}
 
-		SerializedProperty argument;
-		var modeEnum = GetMode(mode);
+		PersistentListenerMode modeEnum = GetMode(mode);
 		//only allow argument if we have a valid target / method
 		if (listenerTarget.objectReferenceValue == null || string.IsNullOrEmpty(methodName.stringValue))
 			modeEnum = PersistentListenerMode.Void;
-
-		switch (modeEnum)
+		SerializedProperty argument = modeEnum switch
 		{
-			case PersistentListenerMode.Float:
-				argument = arguments.FindPropertyRelative(kFloatArgument);
-				break;
-			case PersistentListenerMode.Int:
-				argument = arguments.FindPropertyRelative(kIntArgument);
-				break;
-			case PersistentListenerMode.Object:
-				argument = arguments.FindPropertyRelative(kObjectArgument);
-				break;
-			case PersistentListenerMode.String:
-				argument = arguments.FindPropertyRelative(kStringArgument);
-				break;
-			case PersistentListenerMode.Bool:
-				argument = arguments.FindPropertyRelative(kBoolArgument);
-				break;
-			default:
-				argument = arguments.FindPropertyRelative(kIntArgument);
-				break;
-		}
-
-		var desiredArgTypeName = arguments.FindPropertyRelative(kObjectArgumentAssemblyTypeName).stringValue;
-		var desiredType = typeof(Object);
+			PersistentListenerMode.Float => arguments.FindPropertyRelative(kFloatArgument),
+			PersistentListenerMode.Int => arguments.FindPropertyRelative(kIntArgument),
+			PersistentListenerMode.Object => arguments.FindPropertyRelative(kObjectArgument),
+			PersistentListenerMode.String => arguments.FindPropertyRelative(kStringArgument),
+			PersistentListenerMode.Bool => arguments.FindPropertyRelative(kBoolArgument),
+			_ => arguments.FindPropertyRelative(kIntArgument),
+		};
+		string desiredArgTypeName = arguments.FindPropertyRelative(kObjectArgumentAssemblyTypeName).stringValue;
+		Type desiredType = typeof(UnityObject);
 		if (!string.IsNullOrEmpty(desiredArgTypeName))
-			desiredType = Type.GetType(desiredArgTypeName, false) ?? typeof(Object);
-
+			desiredType = Type.GetType(desiredArgTypeName, false) ?? typeof(UnityObject);
 
 		argRect.xMin = goRect.xMax + Spacing;
 
 		if (modeEnum == PersistentListenerMode.Object)
 		{
 			EditorGUI.BeginChangeCheck();
-			var result = EditorGUI.ObjectField(argRect, GUIContent.none, argument.objectReferenceValue, desiredType, true);
+			UnityObject result = EditorGUI.ObjectField(argRect, GUIContent.none, argument.objectReferenceValue, desiredType, true);
 			if (EditorGUI.EndChangeCheck())
 				argument.objectReferenceValue = result;
 		}
-		else if (modeEnum != PersistentListenerMode.Void && modeEnum != PersistentListenerMode.EventDefined)
+		else if (modeEnum is not PersistentListenerMode.Void and not PersistentListenerMode.EventDefined)
 		{
 			EditorGUI.PropertyField(argRect, argument, GUIContent.none);
 		}
@@ -414,15 +368,15 @@ public class UnityEventCompactDrawer : PropertyDrawer
 				}
 				else
 				{
-					var buttonLabel = new StringBuilder();
+					StringBuilder buttonLabel = new();
 					if (listenerTarget.objectReferenceValue == null || string.IsNullOrEmpty(methodName.stringValue))
 					{
 						buttonLabel.Append(kNoFunctionString);
 					}
 					else if (!UnityEventDrawer.IsPersistantListenerValid(m_DummyEvent, methodName.stringValue, listenerTarget.objectReferenceValue, GetMode(mode), desiredType))
 					{
-						var instanceString = "UnknownComponent";
-						var instance = listenerTarget.objectReferenceValue;
+						string instanceString = "UnknownComponent";
+						UnityObject instance = listenerTarget.objectReferenceValue;
 						if (instance != null)
 							instanceString = instance.GetType().Name;
 
@@ -436,7 +390,7 @@ public class UnityEventCompactDrawer : PropertyDrawer
 						{
 							buttonLabel.Append(".");
 							if (methodName.stringValue.StartsWith("set_"))
-								buttonLabel.Append(methodName.stringValue.Substring(4));
+								buttonLabel.Append(methodName.stringValue[4..]);
 							else
 								buttonLabel.Append(methodName.stringValue);
 						}
@@ -448,18 +402,18 @@ public class UnityEventCompactDrawer : PropertyDrawer
 
 				if (GUI.Button(functionRect, buttonContent, EditorStyles.popup))
 				{
-					var popup = BuildPopupList.Invoke(null, new object[] { listenerTarget.objectReferenceValue, m_DummyEvent, pListener }) as GenericMenu;
+					GenericMenu popup = BuildPopupList.Invoke(null, new object[] { listenerTarget.objectReferenceValue, m_DummyEvent, pListener }) as GenericMenu;
 					popup.DropDown(functionRect);
 				}
 			}
+
 			EditorGUI.EndProperty();
 		}
 
 		EditorGUI.EndDisabledGroup();
 		GUI.backgroundColor = c;
 	}
-
-	Rect[] GetRowRects(Rect rect)
+	private Rect[] GetRowRects(Rect rect)
 	{
 		Rect[] rects = new Rect[4];
 
@@ -488,13 +442,11 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		rects[3] = argRect;
 		return rects;
 	}
-
 	protected virtual void OnRemoveEvent(ReorderableList list)
 	{
 		ReorderableList.defaultBehaviours.DoRemoveButton(list);
 		m_LastSelectedIndex = list.index;
 	}
-
 	protected virtual void OnAddEvent(ReorderableList list)
 	{
 		if (m_ListenersArray.hasMultipleDifferentValues)
@@ -504,14 +456,12 @@ public class UnityEventCompactDrawer : PropertyDrawer
 			//The Serialization system applies the Serialized data of one object, to all other objects in the selection.
 			//We handle this case here, by creating a SerializedObject for each object.
 			//Case 639025.
-			foreach (var targetObject in m_ListenersArray.serializedObject.targetObjects)
+			foreach (UnityObject targetObject in m_ListenersArray.serializedObject.targetObjects)
 			{
-				using (var temSerialziedObject = new SerializedObject(targetObject))
-				{
-					var listenerArrayProperty = temSerialziedObject.FindProperty(m_ListenersArray.propertyPath);
-					listenerArrayProperty.arraySize += 1;
-					temSerialziedObject.ApplyModifiedProperties();
-				}
+				using SerializedObject temSerialziedObject = new(targetObject);
+				SerializedProperty listenerArrayProperty = temSerialziedObject.FindProperty(m_ListenersArray.propertyPath);
+				listenerArrayProperty.arraySize += 1;
+				temSerialziedObject.ApplyModifiedProperties();
 			}
 
 			m_ListenersArray.serializedObject.SetIsDifferentCacheDirty();
@@ -524,13 +474,13 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		}
 
 		m_LastSelectedIndex = list.index;
-		var pListener = m_ListenersArray.GetArrayElementAtIndex(list.index);
+		SerializedProperty pListener = m_ListenersArray.GetArrayElementAtIndex(list.index);
 
-		var callState = pListener.FindPropertyRelative(kCallStatePath);
-		var listenerTarget = pListener.FindPropertyRelative(kInstancePath);
-		var methodName = pListener.FindPropertyRelative(kMethodNamePath);
-		var mode = pListener.FindPropertyRelative(kModePath);
-		var arguments = pListener.FindPropertyRelative(kArgumentsPath);
+		SerializedProperty callState = pListener.FindPropertyRelative(kCallStatePath);
+		SerializedProperty listenerTarget = pListener.FindPropertyRelative(kInstancePath);
+		SerializedProperty methodName = pListener.FindPropertyRelative(kMethodNamePath);
+		SerializedProperty mode = pListener.FindPropertyRelative(kModePath);
+		SerializedProperty arguments = pListener.FindPropertyRelative(kArgumentsPath);
 
 		callState.enumValueIndex = (int)UnityEventCallState.RuntimeOnly;
 		listenerTarget.objectReferenceValue = null;
@@ -542,15 +492,6 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		arguments.FindPropertyRelative(kStringArgument).stringValue = null;
 		arguments.FindPropertyRelative(kObjectArgumentAssemblyTypeName).stringValue = null;
 	}
-
-	protected virtual void OnSelectEvent(ReorderableList list)
-	{
-		m_LastSelectedIndex = list.index;
-	}
-
-	protected virtual void OnReorderEvent(ReorderableList list)
-	{
-		m_LastSelectedIndex = list.index;
-	}
+	protected virtual void OnSelectEvent(ReorderableList list) => m_LastSelectedIndex = list.index;
+	protected virtual void OnReorderEvent(ReorderableList list) => m_LastSelectedIndex = list.index;
 }
-#endif
