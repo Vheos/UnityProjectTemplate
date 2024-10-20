@@ -5,55 +5,42 @@ using System.Text;
 [CustomPropertyDrawer(typeof(UnityEventBase), true)]
 public class UnityEventCompactDrawer : PropertyDrawer
 {
-	protected class State
-	{
-		internal ReorderableList m_ReorderableList;
-		public SerializedProperty property;
-		public int lastSelectedIndex;
-	}
-
-	private static readonly MethodInfo BuildPopupList = typeof(UnityEventDrawer).GetMethod("BuildPopupList", BindingFlags.Static | BindingFlags.NonPublic);
-	private static readonly MethodInfo GetEventParams = typeof(UnityEventDrawer).GetMethod("GetEventParams", BindingFlags.Static | BindingFlags.NonPublic);
-	private static readonly MethodInfo GetDummyEvent = typeof(UnityEventDrawer).GetMethod("GetDummyEvent", BindingFlags.Static | BindingFlags.NonPublic);
-	private static GUIStyle foldoutHeader;
-
-	private static float VerticalSpacing
-		=> EditorGUIUtility.standardVerticalSpacing;
-
+	// Consts
 	private const float Spacing = 3;
-
-	private static readonly GUIContent DropdownIcon = EditorGUIUtility.IconContent("icon dropdown");
-	private static readonly GUIContent MixedValueContent = EditorGUIUtility.TrTextContent("—", "Mixed Values");
-	private static readonly GUIContent TempContent = new();
-
+	private const int kExtraSpacing = 2;
 	private const string kNoFunctionString = "No Function";
-
-	//Persistent Listener Paths
 	private const string kInstancePath = "m_Target";
 	private const string kCallStatePath = "m_CallState";
 	private const string kArgumentsPath = "m_Arguments";
 	private const string kModePath = "m_Mode";
 	private const string kMethodNamePath = "m_MethodName";
+	private const string kFloatArgument = "m_FloatArgument";
+	private const string kIntArgument = "m_IntArgument";
+	private const string kObjectArgument = "m_ObjectArgument";
+	private const string kStringArgument = "m_StringArgument";
+	private const string kBoolArgument = "m_BoolArgument";
+	private const string kObjectArgumentAssemblyTypeName = "m_ObjectArgumentAssemblyTypeName";
+	private static readonly MethodInfo BuildPopupList = typeof(UnityEventDrawer).GetMethod("BuildPopupList", BindingFlags.Static | BindingFlags.NonPublic);
+	private static readonly MethodInfo GetEventParams = typeof(UnityEventDrawer).GetMethod("GetEventParams", BindingFlags.Static | BindingFlags.NonPublic);
+	private static readonly MethodInfo GetDummyEvent = typeof(UnityEventDrawer).GetMethod("GetDummyEvent", BindingFlags.Static | BindingFlags.NonPublic);
+	private static readonly GUIContent DropdownIcon = EditorGUIUtility.IconContent("icon dropdown");
+	private static readonly GUIContent MixedValueContent = EditorGUIUtility.TrTextContent("—", "Mixed Values");
+	private static readonly GUIContent TempContent = new();
 
-	//ArgumentCache paths
-	internal const string kFloatArgument = "m_FloatArgument";
-	internal const string kIntArgument = "m_IntArgument";
-	internal const string kObjectArgument = "m_ObjectArgument";
-	internal const string kStringArgument = "m_StringArgument";
-	internal const string kBoolArgument = "m_BoolArgument";
-	internal const string kObjectArgumentAssemblyTypeName = "m_ObjectArgumentAssemblyTypeName";
+	// Fields
+	private static GUIStyle foldoutHeader;
 	private string m_Text;
 	private UnityEventBase m_DummyEvent;
 	private SerializedProperty m_Prop;
 	private SerializedProperty m_ListenersArray;
-	private const int kExtraSpacing = 2;
-
-	//State:
 	private ReorderableList m_ReorderableList;
 	private int m_LastSelectedIndex;
 	private State currentState;
 	private readonly Dictionary<string, State> m_States = new();
 
+	// Methods
+	private static float VerticalSpacing
+		=> EditorGUIUtility.standardVerticalSpacing;
 	private State GetState(SerializedProperty prop)
 	{
 		string key = prop.propertyPath;
@@ -108,33 +95,6 @@ public class UnityEventCompactDrawer : PropertyDrawer
 
 		return state;
 	}
-	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-	{
-		m_Prop = property;
-		m_Text = label.text;
-
-		currentState = RestoreState(property);
-		currentState.property = property;
-
-		OnGUI(position);
-		currentState.lastSelectedIndex = m_LastSelectedIndex;
-	}
-	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-	{
-		RestoreState(property);
-
-		float height = 0f;
-		if (m_ReorderableList != null)
-		{
-			if (!m_ReorderableList.serializedProperty.isExpanded)
-				return EditorGUIUtility.singleLineHeight + VerticalSpacing + VerticalSpacing;
-
-			height = m_ReorderableList.GetHeight();
-			height += EditorGUIUtility.singleLineHeight;
-		}
-
-		return height + VerticalSpacing;
-	}
 	public void OnGUI(Rect rect)
 	{
 		if (m_ListenersArray == null || !m_ListenersArray.isArray)
@@ -171,6 +131,79 @@ public class UnityEventCompactDrawer : PropertyDrawer
 
 			EditorGUI.indentLevel = oldIndent;
 		}
+	}
+	private static PersistentListenerMode GetMode(SerializedProperty mode) => (PersistentListenerMode)mode.enumValueIndex;
+	private float OnGetElementHeight(int index)
+	{
+		if (m_ReorderableList == null)
+			return 0;
+
+		SerializedProperty element = m_ListenersArray.GetArrayElementAtIndex(index);
+
+		SerializedProperty mode = element.FindPropertyRelative(kModePath);
+		PersistentListenerMode modeEnum = GetMode(mode);
+
+		float spacing = VerticalSpacing + kExtraSpacing;
+
+		return modeEnum is PersistentListenerMode.Object or not PersistentListenerMode.Void and not PersistentListenerMode.EventDefined
+			? EditorGUIUtility.singleLineHeight * 2 + VerticalSpacing + spacing
+			: EditorGUIUtility.singleLineHeight + spacing;
+	}
+	private Rect[] GetRowRects(Rect rect)
+	{
+		Rect[] rects = new Rect[4];
+
+		rect.height = EditorGUIUtility.singleLineHeight;
+		rect.y += 2;
+
+		Rect enabledRect = rect;
+		enabledRect.width = 16 + Spacing - 1;
+
+		Rect goRect = rect;
+		goRect.xMin = enabledRect.xMax;
+		goRect.width = rect.width;
+		// Shrink object field when inspector is small
+		goRect.width *= Mathf.Lerp(0, 0.4f, (rect.width - 125) / (350 - 100));
+		goRect.width = Mathf.Max(goRect.width, 35);
+
+		Rect functionRect = rect;
+		functionRect.xMin = goRect.xMax + Spacing;
+
+		Rect argRect = rect;
+		argRect.y += EditorGUIUtility.singleLineHeight + VerticalSpacing;
+
+		rects[0] = enabledRect;
+		rects[1] = goRect;
+		rects[2] = functionRect;
+		rects[3] = argRect;
+		return rects;
+	}
+	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+	{
+		m_Prop = property;
+		m_Text = label.text;
+
+		currentState = RestoreState(property);
+		currentState.property = property;
+
+		OnGUI(position);
+		currentState.lastSelectedIndex = m_LastSelectedIndex;
+	}
+	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+	{
+		RestoreState(property);
+
+		float height = 0f;
+		if (m_ReorderableList != null)
+		{
+			if (!m_ReorderableList.serializedProperty.isExpanded)
+				return EditorGUIUtility.singleLineHeight + VerticalSpacing + VerticalSpacing;
+
+			height = m_ReorderableList.GetHeight();
+			height += EditorGUIUtility.singleLineHeight;
+		}
+
+		return height + VerticalSpacing;
 	}
 	protected virtual bool DrawListHeader(Rect rect, ReorderableList list)
 	{
@@ -237,23 +270,6 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		}
 
 		return property.isExpanded;
-	}
-	private static PersistentListenerMode GetMode(SerializedProperty mode) => (PersistentListenerMode)mode.enumValueIndex;
-	private float OnGetElementHeight(int index)
-	{
-		if (m_ReorderableList == null)
-			return 0;
-
-		SerializedProperty element = m_ListenersArray.GetArrayElementAtIndex(index);
-
-		SerializedProperty mode = element.FindPropertyRelative(kModePath);
-		PersistentListenerMode modeEnum = GetMode(mode);
-
-		float spacing = VerticalSpacing + kExtraSpacing;
-
-		return modeEnum is PersistentListenerMode.Object or not PersistentListenerMode.Void and not PersistentListenerMode.EventDefined
-			? EditorGUIUtility.singleLineHeight * 2 + VerticalSpacing + spacing
-			: EditorGUIUtility.singleLineHeight + spacing;
 	}
 	protected virtual void DrawEvent(Rect rect, int index, bool isActive, bool isFocused)
 	{
@@ -413,35 +429,6 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		EditorGUI.EndDisabledGroup();
 		GUI.backgroundColor = c;
 	}
-	private Rect[] GetRowRects(Rect rect)
-	{
-		Rect[] rects = new Rect[4];
-
-		rect.height = EditorGUIUtility.singleLineHeight;
-		rect.y += 2;
-
-		Rect enabledRect = rect;
-		enabledRect.width = 16 + Spacing - 1;
-
-		Rect goRect = rect;
-		goRect.xMin = enabledRect.xMax;
-		goRect.width = rect.width;
-		// Shrink object field when inspector is small
-		goRect.width *= Mathf.Lerp(0, 0.4f, (rect.width - 125) / (350 - 100));
-		goRect.width = Mathf.Max(goRect.width, 35);
-
-		Rect functionRect = rect;
-		functionRect.xMin = goRect.xMax + Spacing;
-
-		Rect argRect = rect;
-		argRect.y += EditorGUIUtility.singleLineHeight + VerticalSpacing;
-
-		rects[0] = enabledRect;
-		rects[1] = goRect;
-		rects[2] = functionRect;
-		rects[3] = argRect;
-		return rects;
-	}
 	protected virtual void OnRemoveEvent(ReorderableList list)
 	{
 		ReorderableList.defaultBehaviours.DoRemoveButton(list);
@@ -494,4 +481,12 @@ public class UnityEventCompactDrawer : PropertyDrawer
 	}
 	protected virtual void OnSelectEvent(ReorderableList list) => m_LastSelectedIndex = list.index;
 	protected virtual void OnReorderEvent(ReorderableList list) => m_LastSelectedIndex = list.index;
+
+	// Definitions
+	protected class State
+	{
+		internal ReorderableList m_ReorderableList;
+		public SerializedProperty property;
+		public int lastSelectedIndex;
+	}
 }
