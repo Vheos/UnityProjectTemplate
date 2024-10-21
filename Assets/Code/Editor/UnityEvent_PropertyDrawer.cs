@@ -2,6 +2,8 @@ namespace UnityProject.Editor;
 using System.Reflection;
 using System.Text;
 
+#nullable disable
+
 [CustomPropertyDrawer(typeof(UnityEventBase), true)]
 public class UnityEventCompactDrawer : PropertyDrawer
 {
@@ -97,7 +99,7 @@ public class UnityEventCompactDrawer : PropertyDrawer
 	}
 	public void OnGUI(Rect rect)
 	{
-		if (m_ListenersArray == null || !m_ListenersArray.isArray)
+		if (m_ListenersArray?.isArray != true)
 			return;
 
 		m_DummyEvent = GetDummyEvent.Invoke(null, new[] { m_Prop }) as UnityEventBase;
@@ -213,12 +215,12 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		SerializedProperty property = list.serializedProperty;
 
 		rect.xMin += 16;
-		rect.yMin += 1;
+		rect.yMin++;
 		rect.height = EditorGUIUtility.singleLineHeight;
 
 		Rect foldoutRect = new(rect);
 		foldoutRect.width -= buttonsWidth + sizeWidth;
-		foldoutRect.height -= 1;
+		foldoutRect.height--;
 
 		foldoutHeader ??= new GUIStyle(EditorStyles.foldoutHeader)
 		{
@@ -240,8 +242,8 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		}
 
 		Rect sizeRect = new(rect) { x = foldoutRect.xMax, width = sizeWidth };
-		sizeRect.yMin += 1;
-		sizeRect.height -= 1;
+		sizeRect.yMin++;
+		sizeRect.height--;
 
 		// Size field
 		{
@@ -257,7 +259,7 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		}
 
 		Rect footerRect = new(rect) { x = sizeRect.xMax + 12, width = buttonsWidth };
-		footerRect.yMin += 1;
+		footerRect.yMin++;
 
 		// Footer buttons
 		{
@@ -278,7 +280,7 @@ public class UnityEventCompactDrawer : PropertyDrawer
 		Rect contentRect = rect;
 		contentRect.xMin -= 6;
 		contentRect.xMax += 2;
-		contentRect.y += 1;
+		contentRect.y++;
 
 		Rect[] subRects = GetRowRects(contentRect);
 		Rect enabledRect = subRects[0];
@@ -396,7 +398,7 @@ public class UnityEventCompactDrawer : PropertyDrawer
 						if (instance != null)
 							instanceString = instance.GetType().Name;
 
-						buttonLabel.Append(string.Format("<Missing {0}.{1}>", instanceString, methodName.stringValue));
+						buttonLabel.AppendFormat("<Missing {0}.{1}>", instanceString, methodName.stringValue);
 					}
 					else
 					{
@@ -447,7 +449,7 @@ public class UnityEventCompactDrawer : PropertyDrawer
 			{
 				using SerializedObject temSerialziedObject = new(targetObject);
 				SerializedProperty listenerArrayProperty = temSerialziedObject.FindProperty(m_ListenersArray.propertyPath);
-				listenerArrayProperty.arraySize += 1;
+				listenerArrayProperty.arraySize++;
 				temSerialziedObject.ApplyModifiedProperties();
 			}
 
