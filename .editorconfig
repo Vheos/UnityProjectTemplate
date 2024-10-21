@@ -133,5 +133,13 @@ csharp_style_var_when_type_is_apparent = false:suggestion
 csharp_style_var_elsewhere = false:silent
 
 # RCS1123: Add parentheses when necessary
-# this rule adds logically-redundant parantheses, as in (a * b) + c
+# adds logically-redundant parantheses, as in (a * b) + c
 dotnet_diagnostic.RCS1123.severity = none
+
+# RCS1169: Make field read-only
+# catches fields that must be settable, such as fields marked with [SerializeField]
+dotnet_diagnostic.RCS1169.severity = none
+
+# IDE0161: Convert to file-scoped namespace
+# catches files with MonoBehaviours, but file-scoped namespace breaks them in Unity
+dotnet_diagnostic.IDE0161.severity = none
