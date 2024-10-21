@@ -16,3 +16,6 @@ global using UnityRandom = UnityEngine.Random;
 // Unity Editor
 global using UnityEditor;
 global using UnityEditorInternal;
+
+// Runtime
+global using Vheos.UnityProject;

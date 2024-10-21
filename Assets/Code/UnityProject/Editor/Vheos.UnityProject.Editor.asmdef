@@ -1,6 +1,6 @@
 {
-    "name": "UnityProject.Editor",
-    "rootNamespace": "UnityProject.Editor",
+    "name": "Vheos.UnityProject.Editor",
+    "rootNamespace": "Vheos.UnityProject.Editor",
     "references": [
         "GUID:c4562ff68f382644d817901fd38d2a4c"
     ],

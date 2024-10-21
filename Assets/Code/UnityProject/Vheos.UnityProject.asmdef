@@ -1,6 +1,6 @@
 {
-    "name": "UnityProject",
-    "rootNamespace": "UnityProject",
+    "name": "Vheos.UnityProject",
+    "rootNamespace": "Vheos.UnityProject",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
