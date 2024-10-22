@@ -823,7 +823,7 @@ PlayerSettings:
   additionalCompilerArguments:
     Standalone:
     - /langversion:latest
-    - /nullable:enable
+    - /nullable:enable /nowarn:CS8618
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
