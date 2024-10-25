@@ -822,7 +822,7 @@ PlayerSettings:
   scriptingDefineSymbols: {}
   additionalCompilerArguments:
     Standalone:
-    - /langversion:latest
+    - /langversion:preview
     - /nullable:enable /nowarn:CS8618
   platformArchitecture: {}
   scriptingBackend:
