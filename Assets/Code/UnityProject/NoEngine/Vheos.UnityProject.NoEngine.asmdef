@@ -1,9 +1,7 @@
 {
-    "name": "Vheos.UnityProject",
-    "rootNamespace": "Vheos.UnityProject",
-    "references": [
-        "GUID:fe69f25c7d7c68d4d972413da620aca0"
-    ],
+    "name": "Vheos.UnityProject.NoEngine",
+    "rootNamespace": "Vheos.UnityProject.NoEngine",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -12,5 +10,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": false
+    "noEngineReferences": true
 }
