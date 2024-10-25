@@ -10,6 +10,7 @@ public class UnityObject_Editor : UnityEditor.Editor
 	// Methods
 	public override void OnInspectorGUI()
 	{
+		serializedObject.Update();
 		DrawPropertiesExcluding(serializedObject, ScriptPropertyName);
 		serializedObject.ApplyModifiedProperties();
 	}
