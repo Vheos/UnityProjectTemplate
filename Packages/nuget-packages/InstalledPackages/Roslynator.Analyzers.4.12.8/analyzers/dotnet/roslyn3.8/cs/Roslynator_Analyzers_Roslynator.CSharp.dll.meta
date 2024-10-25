@@ -1,7 +1,8 @@
 fileFormatVersion: 2
-guid: c79a8e5239366f24e8e70fe6ba94a4ab
+guid: a35b9008b33c8a7469e9a2ed15481f68
 labels:
 - NuGetForUnity
+- RoslynAnalyzer
 PluginImporter:
   externalObjects: {}
   serializedVersion: 3
@@ -9,7 +10,7 @@ PluginImporter:
   executionOrder: {}
   defineConstraints: []
   isPreloaded: 0
-  isOverridable: 0
+  isOverridable: 1
   isExplicitlyReferenced: 0
   validateReferences: 1
   platformData:

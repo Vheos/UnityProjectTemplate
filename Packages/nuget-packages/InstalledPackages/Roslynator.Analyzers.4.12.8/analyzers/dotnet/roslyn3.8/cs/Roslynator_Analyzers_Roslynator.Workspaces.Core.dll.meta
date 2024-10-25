@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a35b9008b33c8a7469e9a2ed15481f68
+guid: 24a987286cc62e240bcd65151803af9b
 labels:
 - NuGetForUnity
 - RoslynAnalyzer
@@ -10,7 +10,7 @@ PluginImporter:
   executionOrder: {}
   defineConstraints: []
   isPreloaded: 0
-  isOverridable: 0
+  isOverridable: 1
   isExplicitlyReferenced: 0
   validateReferences: 1
   platformData:
