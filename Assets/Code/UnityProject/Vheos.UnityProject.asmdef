@@ -1,9 +1,7 @@
 {
     "name": "Vheos.UnityProject",
     "rootNamespace": "Vheos.UnityProject",
-    "references": [
-        "GUID:fe69f25c7d7c68d4d972413da620aca0"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
