@@ -141,7 +141,7 @@ dotnet_diagnostic.RCS1123.severity = none
 dotnet_diagnostic.RCS1169.severity = none
 
 # IDE0161: Convert to file-scoped namespace
-# catches files with MonoBehaviours, but file-scoped namespace breaks them in Unity
+# catches files with MonoBehaviours (file-scoped namespace breaks them in Unity)
 dotnet_diagnostic.IDE0161.severity = none
 
 # RCS1213: Remove unused member declaration
