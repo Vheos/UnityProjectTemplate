@@ -1,39 +1,41 @@
-namespace UnityProject.Editor;
-using System.Text.RegularExpressions;
-
-public class CsprojPostprocessor : AssetPostprocessor
+namespace UnityProject.Editor
 {
-	// Keys
-	private const string LangVersionKey = "LangVersion";
-	private const string NullableKey = "Nullable";
-	private const string TargetFrameworkVersionKey = "TargetFrameworkVersion";
-	private const string TargetFrameworkKey = "TargetFramework";
+	using System.Text.RegularExpressions;
 
-	// Settings
-	private const string LangVersion = "11.0";
-	private const string TargetFramework = "netstandard2.1";
-	private const bool EnableNullableContext = true;
-
-	// Methods
-	private static string OnGeneratedCSProject(string _, string content)
+	public class CsprojPostprocessor : AssetPostprocessor
 	{
-		string pattern, replacement;
+		// Keys
+		private const string LangVersionKey = "LangVersion";
+		private const string NullableKey = "Nullable";
+		private const string TargetFrameworkVersionKey = "TargetFrameworkVersion";
+		private const string TargetFrameworkKey = "TargetFramework";
 
-		// LangVersion, Nullable
-		pattern = CreateKeyValue(LangVersionKey, ".*?");
-		replacement = CreateKeyValue(LangVersionKey, LangVersion);
-		if (EnableNullableContext)
-			replacement += '\n' + CreateKeyValue(NullableKey, "enable");
+		// Settings
+		private const string LangVersion = "11.0";
+		private const string TargetFramework = "netstandard2.1";
+		private const bool EnableNullableContext = true;
 
-		content = Regex.Replace(content, pattern, replacement);
+		// Methods
+		private static string OnGeneratedCSProject(string _, string content)
+		{
+			string pattern, replacement;
 
-		// TargetFramework
-		pattern = CreateKeyValue(TargetFrameworkVersionKey, ".*?");
-		replacement = CreateKeyValue(TargetFrameworkKey, TargetFramework);
-		content = Regex.Replace(content, pattern, replacement);
+			// LangVersion, Nullable
+			pattern = CreateKeyValue(LangVersionKey, ".*?");
+			replacement = CreateKeyValue(LangVersionKey, LangVersion);
+			if (EnableNullableContext)
+				replacement += '\n' + CreateKeyValue(NullableKey, "enable");
 
-		return content;
+			content = Regex.Replace(content, pattern, replacement);
+
+			// TargetFramework
+			pattern = CreateKeyValue(TargetFrameworkVersionKey, ".*?");
+			replacement = CreateKeyValue(TargetFrameworkKey, TargetFramework);
+			content = Regex.Replace(content, pattern, replacement);
+
+			return content;
+		}
+		private static string CreateKeyValue(string key, string value)
+			=> $"<{key}>{value}</{key}>";
 	}
-	private static string CreateKeyValue(string key, string value)
-		=> $"<{key}>{value}</{key}>";
 }
