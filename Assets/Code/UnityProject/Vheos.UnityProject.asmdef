@@ -2,13 +2,19 @@
     "name": "Vheos.UnityProject",
     "rootNamespace": "Vheos.UnityProject",
     "references": [
-        "GUID:43d95f107ff4f7e4da178b74f39b7e59"
+        "GUID:43d95f107ff4f7e4da178b74f39b7e59",
+        "GUID:57a6d82589ae03c4cabdc058f719f231",
+        "GUID:caca889fed6088d40b22c2d7e2909c31",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:029c1c1b674aaae47a6841a0b89ad80e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "DOTween.dll"
+    ],
     "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
