@@ -840,7 +840,7 @@ PlayerSettings:
   additionalCompilerArguments:
     Standalone:
     - /langversion:preview
-    - /nullable:enable /nowarn:CS8618
+    - /nullable:enable
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
