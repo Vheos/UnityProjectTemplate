@@ -1,0 +1,9 @@
+{
+  "solution": {
+    "path": "UnityProjectTemplate.sln",
+    "projects": [
+      "Vheos.UnityProject.Editor.csproj",
+      "Vheos.UnityProject.csproj"
+    ]
+  }
+}
