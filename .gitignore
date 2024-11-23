@@ -76,3 +76,4 @@ crashlytics-build.properties
 # Custom
 *.vsconfig
 !/[Ll]ibrary/*.asset
+!/[Ll]ibrary/LastSceneManagerSetup.txt
