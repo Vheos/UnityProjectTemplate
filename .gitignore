@@ -81,11 +81,8 @@ crashlytics-build.properties
 # build settings
 !/[Ll]ibrary/EditorUserBuildSettings.asset
 
-# Scene view: snap settings
-!/[Ll]ibrary/EditorSnapSettings.asset
-
 # Hierarchy: opened scenes and their state (loaded, active)
 !/[Ll]ibrary/LastSceneManagerSetup.txt
 
-# Inspector: expanded/collapsed state of components
-!/[Ll]ibrary/InspectorExpandedItems.asset
+# Scene view: snap settings
+!/[Ll]ibrary/EditorSnapSettings.asset
