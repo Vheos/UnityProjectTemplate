@@ -1,41 +1,56 @@
+#pragma warning disable
+
+using System.Text.RegularExpressions;
+using UnityEditor;
+
 namespace UnityProject.Editor
 {
-	using System.Text.RegularExpressions;
-
 	public class CsprojPostprocessor : AssetPostprocessor
 	{
-		// Keys
-		private const string LangVersionKey = "LangVersion";
-		private const string NullableKey = "Nullable";
-		private const string TargetFrameworkVersionKey = "TargetFrameworkVersion";
-		private const string TargetFrameworkKey = "TargetFramework";
-
-		// Settings
-		private const string LangVersion = "11.0";
-		private const string TargetFramework = "netstandard2.1";
-		private const bool EnableNullableContext = true;
+		// Const
+		private const string LangVersion = "LangVersion";
+		private const string Nullable = "Nullable";
+		private const string TargetFrameworkVersion = "TargetFrameworkVersion";
+		private const string TargetFramework = "TargetFramework";
+		private const string PropertyGroup = "PropertyGroup";
+		private const string CSharp11 = "11.0";
+		private const string NetStandard21 = "netstandard2.1";
 
 		// Methods
 		private static string OnGeneratedCSProject(string _, string content)
 		{
 			string pattern, replacement;
+			void Replace(int count = -1)
+				=> content = new Regex(pattern).Replace(content, replacement, count);
 
-			// LangVersion, Nullable
-			pattern = CreateKeyValue(LangVersionKey, ".*?");
-			replacement = CreateKeyValue(LangVersionKey, LangVersion);
-			if (EnableNullableContext)
-				replacement += '\n' + CreateKeyValue(NullableKey, "enable");
+#if FORCE_CSHARP11
+			// Recommended additional compiler argument: /langversion:preview
+			pattern = ElementWithValue(LangVersion, "(.*?)");
+			replacement = ElementWithValue(LangVersion, CSharp11);
+			Replace();
+#endif
 
-			content = Regex.Replace(content, pattern, replacement);
+#if FORCE_NULLABLE
+			// Recommended additional compiler argument: /nullable:enable
+			pattern = $"(.*{ElementOpen(PropertyGroup)}.*)";
+			replacement = "$1\n" + ElementWithValue(Nullable, "enable");
+			Replace(1);
+#endif
 
-			// TargetFramework
-			pattern = CreateKeyValue(TargetFrameworkVersionKey, ".*?");
-			replacement = CreateKeyValue(TargetFrameworkKey, TargetFramework);
-			content = Regex.Replace(content, pattern, replacement);
+#if FORCE_NETSTANDARD21
+			pattern = ElementWithValue(TargetFrameworkVersion, ".*?");
+			replacement = ElementWithValue(TargetFramework, NetStandard21);
+			Replace();
+#endif
 
 			return content;
 		}
-		private static string CreateKeyValue(string key, string value)
-			=> $"<{key}>{value}</{key}>";
+
+		private static string ElementWithValue(string element, string value)
+			=> ElementOpen(element) + value + ElementClose(element);
+		private static string ElementOpen(string element)
+			=> $"<{element}>";
+		private static string ElementClose(string element)
+			=> $"</{element}>";
 	}
 }
