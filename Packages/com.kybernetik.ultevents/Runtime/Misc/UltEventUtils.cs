@@ -21,7 +21,7 @@ namespace UltEvents
         public const string DocumentationURL = "https://kybernetik.com.au/ultevents";
 
         /// <summary>The address of the API documentation.</summary>
-        public const string APIDocumentationURL = DocumentationURL + "/api/UltEvents";
+        public const string APIDocumentationURL = DocumentationURL + "/api/";
 
         /************************************************************************************************************************/
         #region Type Names

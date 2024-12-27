@@ -472,17 +472,17 @@ namespace UltEvents.Editor
                 {
                     case PersistentArgumentType.Parameter:
                         label.text = $"Parameter {callIndex}";
-                        var parameterTypes = DrawerState.Current.Event.ParameterTypes;
+                        var parameterCount = DrawerState.Current.Event.ParameterCount;
                         var parameters = DrawerState.Current.Event.Parameters;
 
-                        if (callIndex < 0 || callIndex >= parameterTypes.Length)
+                        if (callIndex < 0 || callIndex >= parameterCount)
                         {
                             GUI.color = PersistentCallDrawer.ErrorFieldColor;
                             label.tooltip = "Parameter link index out of range";
                         }
                         else
                         {
-                            var parameterType = parameterTypes[callIndex];
+                            var parameterType = DrawerState.Current.Event.GetParameterType(callIndex);
 
                             label.text += $" ({parameterType.GetNameCS(false)}";
 
@@ -553,9 +553,10 @@ namespace UltEvents.Editor
             // Parameters.
             var parameters = DrawerState.Current.Event.Parameters;
 
-            for (int i = 0; i < DrawerState.Current.Event.ParameterTypes.Length; i++)
+            var parameterCount = DrawerState.Current.Event.ParameterCount;
+            for (int i = 0; i < parameterCount; i++)
             {
-                var parameterType = DrawerState.Current.Event.ParameterTypes[i];
+                var parameterType = DrawerState.Current.Event.GetParameterType(i);
                 if (!systemType.IsAssignableFrom(parameterType))
                     continue;
 
@@ -629,10 +630,8 @@ namespace UltEvents.Editor
             {
                 argumentProperty.ModifyValues<PersistentArgument>((argument) =>
                 {
-                    if (wasLink)
+                    if (wasLink)// Unlink.
                     {
-                        // Revert to normal mode.
-
                         argument.SystemType = argument.SystemType;
 
                         var parameter = DrawerState.Current.CurrentParameter;
@@ -640,41 +639,9 @@ namespace UltEvents.Editor
                             (parameter.Attributes & ParameterAttributes.HasDefault) == ParameterAttributes.HasDefault)
                             argument.Value = parameter.DefaultValue;
                     }
-                    else
+                    else// Link.
                     {
-                        // Link to the specified return value.
-
-                        var argumentType = argument.Type;
-                        argument.Type = linkType;
-                        argument._Int = linkIndex;
-
-                        switch (argumentType)
-                        {
-                            case PersistentArgumentType.Bool:
-                            case PersistentArgumentType.String:
-                            case PersistentArgumentType.Int:
-                            case PersistentArgumentType.Float:
-                            case PersistentArgumentType.Vector2:
-                            case PersistentArgumentType.Vector3:
-                            case PersistentArgumentType.Vector4:
-                            case PersistentArgumentType.Quaternion:
-                            case PersistentArgumentType.Color:
-                            case PersistentArgumentType.Color32:
-                            case PersistentArgumentType.Rect:
-                                argument._X = (float)argumentType;
-                                break;
-                            case PersistentArgumentType.Enum:
-                            case PersistentArgumentType.Object:
-                                argument._String = DrawerState.Current.CurrentParameterType?.AssemblyQualifiedName;
-                                break;
-                            case PersistentArgumentType.Parameter:
-                            case PersistentArgumentType.ReturnValue:
-                                throw new InvalidOperationException(
-                                    $"{Names.PersistentArgument.Class} was already linked.");
-                            default:
-                                throw new InvalidOperationException(
-                                    $"Invalid {Names.PersistentArgument.Full.Type}: {argumentType}");
-                        }
+                        argument.LinkTo(DrawerState.Current.Event, linkType, linkIndex);
                     }
                 }, wasLink ? "Unlink Argument" : "Link Argument");
             }

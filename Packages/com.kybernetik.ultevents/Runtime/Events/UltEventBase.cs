@@ -38,16 +38,20 @@ namespace UltEvents
         /// <summary>The number of parameters this event takes.</summary>
         public abstract int ParameterCount { get; }
 
+        /// <summary>Returns the type of one of this event's parameters.</summary>
+        public abstract Type GetParameterType(int index);
+
         /************************************************************************************************************************/
 
         [SerializeField]
         internal List<PersistentCall> _PersistentCalls;
 
-        /// <summary>
-        /// The serialized method and parameter details of this event.
-        /// </summary>
+        /// <summary>The serialized method and parameter details of this event.</summary>
         public List<PersistentCall> PersistentCallsList
-            => _PersistentCalls;
+        {
+            get => _PersistentCalls ??= new();
+            set => _PersistentCalls = value;
+        }
 
         /************************************************************************************************************************/
 
@@ -132,10 +136,8 @@ namespace UltEvents
         /// <summary>Adds the specified `method` to the persistent call list.</summary>
         public PersistentCall AddPersistentCall(Delegate method)
         {
-            _PersistentCalls ??= new List<PersistentCall>(4);
-
             var call = new PersistentCall(method);
-            _PersistentCalls.Add(call);
+            PersistentCallsList.Add(call);
             return call;
         }
 
@@ -262,13 +264,10 @@ namespace UltEvents
 #if UNITY_EDITOR
         /************************************************************************************************************************/
 
-        /// <summary>The type of each of this event's parameters.</summary>
-        public abstract Type[] ParameterTypes { get; }
-
-        /************************************************************************************************************************/
-
         private static readonly Dictionary<Type, ParameterInfo[]>
             EventTypeToParameters = new();
+
+        private static Type[] _CachedTypes = Type.EmptyTypes;
 
         internal ParameterInfo[] Parameters
         {
@@ -279,7 +278,14 @@ namespace UltEvents
                 ParameterInfo[] parameters;
                 if (!EventTypeToParameters.TryGetValue(type, out parameters))
                 {
-                    var invokeMethod = type.GetMethod("Invoke", ParameterTypes);
+                    var parameterCount = ParameterCount;
+                    if (_CachedTypes.Length != parameterCount)
+                        _CachedTypes = new Type[parameterCount];
+
+                    for (int i = 0; i < parameterCount; i++)
+                        _CachedTypes[i] = GetParameterType(i);
+
+                    var invokeMethod = type.GetMethod("Invoke", _CachedTypes);
                     if (invokeMethod == null || invokeMethod.DeclaringType == typeof(UltEvent) ||
                         invokeMethod.DeclaringType.Name.StartsWith(Names.UltEvent.Class + "`"))
                     {
@@ -311,7 +317,8 @@ namespace UltEvents
                 string parameters;
                 if (!EventTypeToParameterString.TryGetValue(type, out parameters))
                 {
-                    if (ParameterTypes.Length == 0)
+                    var parameterCount = ParameterCount;
+                    if (parameterCount == 0)
                     {
                         parameters = " ()";
                     }
@@ -322,12 +329,12 @@ namespace UltEvents
                         var text = new StringBuilder();
 
                         text.Append(" (");
-                        for (int i = 0; i < ParameterTypes.Length; i++)
+                        for (int i = 0; i < parameterCount; i++)
                         {
                             if (i > 0)
                                 text.Append(", ");
 
-                            text.Append(ParameterTypes[i].GetNameCS(false));
+                            text.Append(GetParameterType(i).GetNameCS(false));
 
                             if (invokeMethodParameters != null)
                             {

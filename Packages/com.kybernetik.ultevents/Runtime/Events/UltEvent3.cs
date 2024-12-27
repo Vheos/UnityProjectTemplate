@@ -39,7 +39,18 @@ namespace UltEvents
         /************************************************************************************************************************/
 
         /// <inheritdoc/>
-        public override int ParameterCount => 3;
+        public override int ParameterCount
+            => 3;
+
+        /// <inheritdoc/>
+        public override Type GetParameterType(int index)
+            => index switch
+            {
+                0 => typeof(T0),
+                1 => typeof(T1),
+                2 => typeof(T2),
+                _ => throw new ArgumentOutOfRangeException(nameof(index)),
+            };
 
         /************************************************************************************************************************/
 
@@ -168,14 +179,6 @@ namespace UltEvents
 
         /************************************************************************************************************************/
         #endregion
-        /************************************************************************************************************************/
-
-#if UNITY_EDITOR
-        /// <summary>[Editor-Only] The types of each of this event's parameters.</summary>
-        public override Type[] ParameterTypes => _ParameterTypes;
-        private static readonly Type[] _ParameterTypes = { typeof(T0), typeof(T1), typeof(T2) };
-#endif
-
         /************************************************************************************************************************/
 
         /// <inheritdoc/>

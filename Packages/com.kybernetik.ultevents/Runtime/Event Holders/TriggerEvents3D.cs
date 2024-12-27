@@ -7,32 +7,26 @@ using UnityEngine;
 namespace UltEvents
 {
     /// <summary>
-    /// An event that takes a single <see cref="Collider"/> parameter.
-    /// </summary>
-    [System.Serializable]
-    public sealed class TriggerEvent3D : UltEvent<Collider> { }
-
-    /************************************************************************************************************************/
-
-    /// <summary>
     /// Holds <see cref="UltEvent"/>s which are called by various <see cref="MonoBehaviour"/> trigger events:
-    /// <see cref="OnTriggerEnter"/>, <see cref="OnTriggerStay"/>, and <see cref="OnTriggerExit"/>.
+    /// <see cref="OnTriggerEnter"/>,
+    /// <see cref="OnTriggerStay"/>, and
+    /// <see cref="OnTriggerExit"/>.
     /// </summary>
     [AddComponentMenu(UltEventUtils.ComponentMenuPrefix + "Trigger Events 3D")]
-    [HelpURL(UltEventUtils.APIDocumentationURL + "/TriggerEvents3D")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Collider))]
+    [UltEventsHelpUrl(typeof(TriggerEvents3D))]
     public class TriggerEvents3D : MonoBehaviour
     {
         /************************************************************************************************************************/
 
         [SerializeField]
-        private TriggerEvent3D _TriggerEnterEvent;
+        private UltEvent<Collider> _TriggerEnterEvent;
 
         /// <summary>Invoked by <see cref="OnTriggerEnter"/>.</summary>
-        public TriggerEvent3D TriggerEnterEvent
+        public UltEvent<Collider> TriggerEnterEvent
         {
-            get => _TriggerEnterEvent ??= new TriggerEvent3D();
+            get => _TriggerEnterEvent ??= new();
             set => _TriggerEnterEvent = value;
         }
 
@@ -43,12 +37,12 @@ namespace UltEvents
         /************************************************************************************************************************/
 
         [SerializeField]
-        private TriggerEvent3D _TriggerStayEvent;
+        private UltEvent<Collider> _TriggerStayEvent;
 
         /// <summary>Invoked by <see cref="OnTriggerStay"/>.</summary>
-        public TriggerEvent3D TriggerStayEvent
+        public UltEvent<Collider> TriggerStayEvent
         {
-            get => _TriggerStayEvent ??= new TriggerEvent3D();
+            get => _TriggerStayEvent ??= new();
             set => _TriggerStayEvent = value;
         }
 
@@ -59,12 +53,12 @@ namespace UltEvents
         /************************************************************************************************************************/
 
         [SerializeField]
-        private TriggerEvent3D _TriggerExitEvent;
+        private UltEvent<Collider> _TriggerExitEvent;
 
         /// <summary>Invoked by <see cref="OnTriggerExit"/>.</summary>
-        public TriggerEvent3D TriggerExitEvent
+        public UltEvent<Collider> TriggerExitEvent
         {
-            get => _TriggerExitEvent ??= new TriggerEvent3D();
+            get => _TriggerExitEvent ??= new();
             set => _TriggerExitEvent = value;
         }
 

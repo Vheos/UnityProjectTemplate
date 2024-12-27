@@ -7,32 +7,26 @@ using UnityEngine;
 namespace UltEvents
 {
     /// <summary>
-    /// An event that takes a single <see cref="Collision2D"/> parameter.
-    /// </summary>
-    [System.Serializable]
-    public sealed class CollisionEvent2D : UltEvent<Collision2D> { }
-
-    /************************************************************************************************************************/
-
-    /// <summary>
     /// Holds <see cref="UltEvent"/>s which are called by various <see cref="MonoBehaviour"/> 2D collision events:
-    /// <see cref="OnCollisionEnter2D"/>, <see cref="OnCollisionStay2D"/>, and <see cref="OnCollisionExit2D"/>.
+    /// <see cref="OnCollisionEnter2D"/>,
+    /// <see cref="OnCollisionStay2D"/>, and
+    /// <see cref="OnCollisionExit2D"/>.
     /// </summary>
     [AddComponentMenu(UltEventUtils.ComponentMenuPrefix + "Collision Events 2D")]
-    [HelpURL(UltEventUtils.APIDocumentationURL + "/CollisionEvents2D")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Collider2D))]
+    [UltEventsHelpUrl(typeof(CollisionEvents2D))]
     public class CollisionEvents2D : MonoBehaviour
     {
         /************************************************************************************************************************/
 
         [SerializeField]
-        private CollisionEvent2D _CollisionEnterEvent;
+        private UltEvent<Collision2D> _CollisionEnterEvent;
 
         /// <summary>Invoked by <see cref="OnCollisionEnter2D"/>.</summary>
-        public CollisionEvent2D CollisionEnterEvent
+        public UltEvent<Collision2D> CollisionEnterEvent
         {
-            get => _CollisionEnterEvent ??= new CollisionEvent2D();
+            get => _CollisionEnterEvent ??= new();
             set => _CollisionEnterEvent = value;
         }
 
@@ -43,12 +37,12 @@ namespace UltEvents
         /************************************************************************************************************************/
 
         [SerializeField]
-        private CollisionEvent2D _CollisionStayEvent;
+        private UltEvent<Collision2D> _CollisionStayEvent;
 
         /// <summary>Invoked by <see cref="OnCollisionStay2D"/>.</summary>
-        public CollisionEvent2D CollisionStayEvent
+        public UltEvent<Collision2D> CollisionStayEvent
         {
-            get => _CollisionStayEvent ??= new CollisionEvent2D();
+            get => _CollisionStayEvent ??= new();
             set => _CollisionStayEvent = value;
         }
 
@@ -59,12 +53,12 @@ namespace UltEvents
         /************************************************************************************************************************/
 
         [SerializeField]
-        private CollisionEvent2D _CollisionExitEvent;
+        private UltEvent<Collision2D> _CollisionExitEvent;
 
         /// <summary>Invoked by <see cref="OnCollisionExit2D"/>.</summary>
-        public CollisionEvent2D CollisionExitEvent
+        public UltEvent<Collision2D> CollisionExitEvent
         {
-            get => _CollisionExitEvent ??= new CollisionEvent2D();
+            get => _CollisionExitEvent ??= new();
             set => _CollisionExitEvent = value;
         }
 

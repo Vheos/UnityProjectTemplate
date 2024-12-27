@@ -39,7 +39,12 @@ namespace UltEvents
         /************************************************************************************************************************/
 
         /// <inheritdoc/>
-        public override int ParameterCount => 0;
+        public override int ParameterCount
+            => 0;
+
+        /// <inheritdoc/>
+        public override Type GetParameterType(int index)
+            => throw new InvalidOperationException($"Parameterless {nameof(UltEvent)} has no parameters.");
 
         /************************************************************************************************************************/
 
@@ -169,14 +174,6 @@ namespace UltEvents
 
         /************************************************************************************************************************/
         #endregion
-        /************************************************************************************************************************/
-
-#if UNITY_EDITOR
-        /// <summary>[Editor-Only] The types of each of this event's parameters.</summary>
-        public override Type[] ParameterTypes
-            => Type.EmptyTypes;
-#endif
-
         /************************************************************************************************************************/
 
         /// <inheritdoc/>

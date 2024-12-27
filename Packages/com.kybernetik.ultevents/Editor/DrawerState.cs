@@ -251,10 +251,10 @@ namespace UltEvents.Editor
             if (type != null && Event != null)
             {
                 // Parameters.
-                var parameterTypes = Event.ParameterTypes;
-                for (int i = 0; i < parameterTypes.Length; i++)
+                var parameterCount = Event.ParameterCount;
+                for (int i = 0; i < parameterCount; i++)
                 {
-                    if (type.IsAssignableFrom(parameterTypes[i]))
+                    if (type.IsAssignableFrom(Event.GetParameterType(i)))
                     {
                         linkIndex = i;
                         linkType = PersistentArgumentType.Parameter;

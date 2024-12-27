@@ -8,7 +8,7 @@ namespace UltEvents.Benchmarks
 {
     /// <summary>Dummy methods for performance testing events.</summary>
     [AddComponentMenu("")]// Don't show in the Add Component menu. You need to drag this script onto a prefab manually.
-    [HelpURL(UltEventUtils.APIDocumentationURL + "/Behchmarks/BenchmarkTestMethods")]
+    [UltEventsHelpUrl(typeof(BenchmarkTestMethods))]
     public class BenchmarkTestMethods : MonoBehaviour
     {
         /************************************************************************************************************************/

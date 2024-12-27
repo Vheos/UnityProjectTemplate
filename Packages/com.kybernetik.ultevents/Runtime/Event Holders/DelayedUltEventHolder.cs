@@ -9,7 +9,7 @@ namespace UltEvents
     /// A component which encapsulates a single <see cref="UltEventBase"/> with a delay before its invocation.
     /// </summary>
     [AddComponentMenu(UltEventUtils.ComponentMenuPrefix + "Delayed Ult Event Holder")]
-    [HelpURL(UltEventUtils.APIDocumentationURL + "/DelayedUltEventHolder")]
+    [UltEventsHelpUrl(typeof(DelayedUltEventHolder))]
     public class DelayedUltEventHolder : UltEventHolder
     {
         /************************************************************************************************************************/
@@ -18,6 +18,8 @@ namespace UltEvents
         private float _Delay;
 
         private WaitForSeconds _Wait;
+
+        /************************************************************************************************************************/
 
         /// <summary>
         /// The number of seconds that will pass between calling <see cref="Invoke"/> and the event actually being invoked.
@@ -30,6 +32,14 @@ namespace UltEvents
                 _Delay = value;
                 _Wait = null;
             }
+        }
+
+        /************************************************************************************************************************/
+
+        /// <summary>Ensures that the wait time isn't improperly cached.</summary>
+        protected virtual void OnValidate()
+        {
+            _Wait = null;
         }
 
         /************************************************************************************************************************/
@@ -47,7 +57,7 @@ namespace UltEvents
 
         private IEnumerator DelayedInvoke()
         {
-            _Wait ??= new WaitForSeconds(_Delay);
+            _Wait ??= new(_Delay);
 
             yield return _Wait;
 

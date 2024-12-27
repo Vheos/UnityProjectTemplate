@@ -6,12 +6,15 @@ namespace UltEvents
 {
     /// <summary>
     /// Holds <see cref="UltEvent"/>s which are called by various <see cref="MonoBehaviour"/> lifecycle events:
-    /// <see cref="Awake"/>, <see cref="Start"/>, <see cref="OnEnable"/>, <see cref="OnDisable"/>, and
+    /// <see cref="Awake"/>,
+    /// <see cref="Start"/>,
+    /// <see cref="OnEnable"/>,
+    /// <see cref="OnDisable"/>, and
     /// <see cref="OnDestroy"/>.
     /// </summary>
     [AddComponentMenu(UltEventUtils.ComponentMenuPrefix + "Life Cycle Events")]
-    [HelpURL(UltEventUtils.APIDocumentationURL + "/LifeCycleEvents")]
     [DisallowMultipleComponent]
+    [UltEventsHelpUrl(typeof(LifeCycleEvents))]
     public class LifeCycleEvents : MonoBehaviour
     {
         /************************************************************************************************************************/
@@ -22,7 +25,7 @@ namespace UltEvents
         /// <summary>Invoked by <see cref="Awake"/>.</summary>
         public UltEvent AwakeEvent
         {
-            get => _AwakeEvent ??= new UltEvent();
+            get => _AwakeEvent ??= new();
             set => _AwakeEvent = value;
         }
 
@@ -38,7 +41,7 @@ namespace UltEvents
         /// <summary>Invoked by <see cref="Start"/>.</summary>
         public UltEvent StartEvent
         {
-            get => _StartEvent ??= new UltEvent();
+            get => _StartEvent ??= new();
             set => _StartEvent = value;
         }
 
@@ -54,7 +57,7 @@ namespace UltEvents
         /// <summary>Invoked by <see cref="OnEnable"/>.</summary>
         public UltEvent EnableEvent
         {
-            get => _EnableEvent ??= new UltEvent();
+            get => _EnableEvent ??= new();
             set => _EnableEvent = value;
         }
 
@@ -70,7 +73,7 @@ namespace UltEvents
         /// <summary>Invoked by <see cref="OnDisable"/>.</summary>
         public UltEvent DisableEvent
         {
-            get => _DisableEvent ??= new UltEvent();
+            get => _DisableEvent ??= new();
             set => _DisableEvent = value;
         }
 
@@ -86,7 +89,7 @@ namespace UltEvents
         /// <summary>Invoked by <see cref="OnDestroy"/>.</summary>
         public UltEvent DestroyEvent
         {
-            get => _DestroyEvent ??= new UltEvent();
+            get => _DestroyEvent ??= new();
             set => _DestroyEvent = value;
         }
 

@@ -6,11 +6,13 @@ namespace UltEvents
 {
     /// <summary>
     /// Holds <see cref="UltEvent"/>s which are called by various <see cref="MonoBehaviour"/> update events:
-    /// <see cref="Update"/>, <see cref="LateUpdate"/>, and <see cref="FixedUpdate"/>.
+    /// <see cref="Update"/>,
+    /// <see cref="LateUpdate"/>, and
+    /// <see cref="FixedUpdate"/>.
     /// </summary>
     [AddComponentMenu(UltEventUtils.ComponentMenuPrefix + "Update Events")]
-    [HelpURL(UltEventUtils.APIDocumentationURL + "/UpdateEvents")]
     [DisallowMultipleComponent]
+    [UltEventsHelpUrl(typeof(UpdateEvents))]
     public class UpdateEvents : MonoBehaviour
     {
         /************************************************************************************************************************/
@@ -21,7 +23,7 @@ namespace UltEvents
         /// <summary>Invoked by <see cref="Update"/>.</summary>
         public UltEvent UpdateEvent
         {
-            get => _UpdateEvent ??= new UltEvent();
+            get => _UpdateEvent ??= new();
             set => _UpdateEvent = value;
         }
 
@@ -37,7 +39,7 @@ namespace UltEvents
         /// <summary>Invoked by <see cref="LateUpdate"/>.</summary>
         public UltEvent LateUpdateEvent
         {
-            get => _LateUpdateEvent ??= new UltEvent();
+            get => _LateUpdateEvent ??= new();
             set => _LateUpdateEvent = value;
         }
 
@@ -53,7 +55,7 @@ namespace UltEvents
         /// <summary>Invoked by <see cref="FixedUpdate"/>.</summary>
         public UltEvent FixedUpdateEvent
         {
-            get => _FixedUpdateEvent ??= new UltEvent();
+            get => _FixedUpdateEvent ??= new();
             set => _FixedUpdateEvent = value;
         }
 

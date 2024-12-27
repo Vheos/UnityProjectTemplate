@@ -11,7 +11,7 @@ namespace UltEvents.Benchmarks
     /// An <see cref="EnableBenchmark"/> which invokes a <see cref="UnityEvent"/>.
     /// </summary>
     [AddComponentMenu("")]// Don't show in the Add Component menu. You need to drag this script onto a prefab manually.
-    [HelpURL(UltEventUtils.APIDocumentationURL + "/Behchmarks/EnableBenchmarkUnityEvent")]
+    [UltEventsHelpUrl(typeof(EnableBenchmarkUnityEvent))]
     public class EnableBenchmarkUnityEvent : EnableBenchmark
     {
         /************************************************************************************************************************/

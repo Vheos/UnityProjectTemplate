@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Kybernetik")]
 [assembly: AssemblyProduct("UltEvents")]
 [assembly: AssemblyCopyright("Copyright © Kybernetik 2024")]
-[assembly: AssemblyVersion("3.0.3.0")]
+[assembly: AssemblyVersion("3.0.5.0")]
 [assembly: ComVisible(false)]
 
 [assembly: InternalsVisibleTo("Kybernetik.UltEvents.Editor")]

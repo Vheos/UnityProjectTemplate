@@ -10,7 +10,7 @@ namespace UltEvents.Benchmarks
     /// A simple performance test that loads and instantiates a prefab to test how long it takes.
     /// </summary>
     [AddComponentMenu("")]// Don't show in the Add Component menu. You need to drag this script onto a prefab manually.
-    [HelpURL(UltEventUtils.APIDocumentationURL + "/Behchmarks/ResourceInstantiateBenchmark")]
+    [UltEventsHelpUrl(typeof(ResourceInstantiateBenchmark))]
     public class ResourceInstantiateBenchmark : MonoBehaviour
     {
         /************************************************************************************************************************/
