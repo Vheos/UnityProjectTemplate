@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f9fd769be7c634610f2a61aa914a1a55f34740e1"
+      "hash": "8042b29ff87dd5506d7aad72bd6d8d7405985f27"
     },
     "com.eflatun.scenereference": {
       "version": "https://github.com/starikcetin/Eflatun.SceneReference.git#upm",
@@ -22,7 +22,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a011c51ed65c9abc3151a7a408bc70d408352933"
+      "hash": "5764d44d4232c8ea628549137559050ea6f6dc10"
     },
     "com.kybernetik.ultevents": {
       "version": "file:com.kybernetik.ultevents",
