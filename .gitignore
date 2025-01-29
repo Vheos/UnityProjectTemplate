@@ -78,11 +78,11 @@ crashlytics-build.properties
 # Visual Studio Installer generated file
 *.vsconfig
 
-# build settings
-!/[Ll]ibrary/EditorUserBuildSettings.asset
-
 # Hierarchy: opened scenes and their state (loaded, active)
-!/[Ll]ibrary/LastSceneManagerSetup.txt
+!/Library/LastSceneManagerSetup.txt
 
 # Scene view: snap settings
-!/[Ll]ibrary/EditorSnapSettings.asset
+!/Library/EditorSnapSettings.asset
+
+# Auto-completion for UXML files
+/UIElementsSchema/
