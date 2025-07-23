@@ -198,12 +198,19 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
-    "com.vheos.force-csharp-11": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/ForceCSharp11",
+    "com.vheos.compact-unity-events": {
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/CompactUnityEvents",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "68412ab23b5e5661075557d9c418c3f049a950fb"
+      "hash": "77fca9a48eb86f9f2a9489edde3d2a52840f6880"
+    },
+    "com.vheos.csharp-extended": {
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/CSharpExtended",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "77fca9a48eb86f9f2a9489edde3d2a52840f6880"
     },
     "com.vheos.value-sources": {
       "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/ValueSources",

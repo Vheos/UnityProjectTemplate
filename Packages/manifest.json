@@ -1,7 +1,8 @@
 {
   "dependencies": {    
-    "com.vheos.force-csharp-11": "https://github.com/Vheos/UnityPackages.git?path=Assets/ForceCSharp11",
-    "com.vheos.value-sources": "https://github.com/Vheos/UnityPackages.git?path=Assets/ValueSources",
+    "com.vheos.csharp-extended": "https://github.com/Vheos/UnityPackages.git?path=Assets/CSharpExtended",
+    "com.vheos.compact-unity-events": "https://github.com/Vheos/UnityPackages.git?path=Assets/CompactUnityEvents",
+    "com.vheos.value-sources": "https://github.com/Vheos/UnityPackages.git?path=Assets/ValueSources",  
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.eflatun.scenereference": "https://github.com/starikcetin/Eflatun.SceneReference.git#upm",
     "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
