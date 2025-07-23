@@ -198,6 +198,20 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.vheos.force-csharp-11": {
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/ForceCSharp11",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "68412ab23b5e5661075557d9c418c3f049a950fb"
+    },
+    "com.vheos.value-sources": {
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/ValueSources",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "68412ab23b5e5661075557d9c418c3f049a950fb"
+    },
     "nuget-packages": {
       "version": "file:nuget-packages",
       "depth": 0,
