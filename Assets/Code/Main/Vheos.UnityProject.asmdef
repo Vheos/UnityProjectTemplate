@@ -1,0 +1,14 @@
+{
+    "name": "Vheos.UnityProject",
+    "rootNamespace": "Vheos.UnityProject",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

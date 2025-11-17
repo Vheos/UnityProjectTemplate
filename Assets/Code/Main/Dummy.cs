@@ -1,4 +1,3 @@
 namespace Vheos.UnityProject;
 
-public class Dummy
-{ }
+public class Dummy;

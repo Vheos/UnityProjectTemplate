@@ -1,7 +1,8 @@
 {
-    "name": "Vheos.UnityProject",
-    "rootNamespace": "Vheos.UnityProject",
+    "name": "Vheos.UnityProject.Implementation",
+    "rootNamespace": "Vheos.UnityProject.Implementation",
     "references": [
+        "GUID:4d1c33c8f37edbe42bcaf15b46e83588",
         "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
@@ -10,8 +11,7 @@
         "GUID:57a6d82589ae03c4cabdc058f719f231",
         "GUID:caca889fed6088d40b22c2d7e2909c31",
         "GUID:43d95f107ff4f7e4da178b74f39b7e59",
-        "GUID:856dceba698ef1a4980dc162ddd5abee",
-        "GUID:124137ecaf50fcb479e13be7879e35b0"
+        "GUID:856dceba698ef1a4980dc162ddd5abee"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

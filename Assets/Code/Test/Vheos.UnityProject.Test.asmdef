@@ -1,0 +1,19 @@
+{
+    "name": "Vheos.UnityProject.Test",
+    "rootNamespace": "Vheos.UnityProject.Test",
+    "references": [
+        "GUID:4d1c33c8f37edbe42bcaf15b46e83588",
+        "GUID:c4562ff68f382644d817901fd38d2a4c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
