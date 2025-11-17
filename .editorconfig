@@ -156,3 +156,7 @@ dotnet_diagnostic.RCS1213.severity = none
 # RCS1036: [deprecated] Remove unnecessary blank line
 # Deprecated
 dotnet_diagnostic.RCS1036.severity = none
+
+# IDE0130: Namespace does not match folder structure
+# assets path enforced by Unity doesn't work nicely with this rule
+dotnet_diagnostic.IDE0130.severity = none
