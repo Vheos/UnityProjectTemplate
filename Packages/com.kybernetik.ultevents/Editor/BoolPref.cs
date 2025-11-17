@@ -1,4 +1,4 @@
-﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2024 Kybernetik //
+﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2025 Kybernetik //
 
 #if UNITY_EDITOR
 
@@ -97,7 +97,9 @@ namespace UltEvents.Editor
             ShowNonPublicMethods = new("Show Non-Public Methods", true),
             GroupNonPublicMethods = new("Group Non-Public Methods", true),
             ShowStaticMethods = new("Show Static Methods", true),
-            ShowFullTypeNames = new("Use Full Type Names", false),
+            ShowFullTypeNames = new("Show Full Type Names", false),
+            ShowDeclaringTypeNames = new("Show Declaring Type Names", false),
+            ShowArrowsForSubMenus = new("Show Arrows For Sub Menus", true),
             GroupMethodOverloads = new("Sub-Menu for Method Overloads", true),
             SubMenuForEachBaseType = new("Base Types ->/Individual Sub-Menus", true, MemberSelectionMenu.ClearMemberCache),
             SubMenuForBaseTypes = new("Base Types ->/Group Sub-Menu", true),
@@ -116,6 +118,8 @@ namespace UltEvents.Editor
             GroupNonPublicMethods.AddToMenu(menu);
             ShowStaticMethods.AddToMenu(menu);
             ShowFullTypeNames.AddToMenu(menu);
+            ShowDeclaringTypeNames.AddToMenu(menu);
+            ShowArrowsForSubMenus.AddToMenu(menu);
             GroupMethodOverloads.AddToMenu(menu);
             SubMenuForEachBaseType.AddToMenu(menu);
             SubMenuForBaseTypes.AddToMenu(menu);
@@ -133,6 +137,8 @@ namespace UltEvents.Editor
             GroupNonPublicMethods.AddToMenu(menu);
             ShowStaticMethods.AddToMenu(menu);
             ShowFullTypeNames.AddToMenu(menu);
+            ShowDeclaringTypeNames.AddToMenu(menu);
+            ShowArrowsForSubMenus.AddToMenu(menu);
             GroupMethodOverloads.AddToMenu(menu);
             SubMenuForEachBaseType.AddToMenu(menu);
             SubMenuForBaseTypes.AddToMenu(menu);

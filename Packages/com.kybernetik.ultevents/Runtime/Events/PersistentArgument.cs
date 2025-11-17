@@ -1,4 +1,4 @@
-﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2024 Kybernetik //
+﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2025 Kybernetik //
 
 using System;
 using UnityEngine;
@@ -676,14 +676,10 @@ namespace UltEvents
 
                 case PersistentArgumentType.Enum:
                 case PersistentArgumentType.Object:
-                    _String = linkSystemType?.AssemblyQualifiedName;
-                    break;
-
                 case PersistentArgumentType.Parameter:
                 case PersistentArgumentType.ReturnValue:
-                    Type = argumentType;
-                    throw new InvalidOperationException(
-                        $"{Names.PersistentArgument.Class} was already linked.");
+                    _String = linkSystemType?.AssemblyQualifiedName;
+                    break;
 
                 default:
                     throw new InvalidOperationException(

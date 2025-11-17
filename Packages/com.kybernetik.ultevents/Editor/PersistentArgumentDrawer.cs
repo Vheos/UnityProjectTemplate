@@ -1,4 +1,4 @@
-﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2024 Kybernetik //
+﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2025 Kybernetik //
 
 #if UNITY_EDITOR
 
@@ -510,7 +510,7 @@ namespace UltEvents.Editor
                         }
                         else
                         {
-                            label.text += MemberSelectionMenu.GetSignature(linkedMember, true);
+                            label.text += MemberSelectionMenu.GetSignature(linkedMember, true, null);
 
                             if ((uint)DrawerState.Current.callIndex <= (uint)callIndex)
                             {
@@ -583,7 +583,7 @@ namespace UltEvents.Editor
                     continue;
 
                 var content = new GUIContent(
-                    $"Returned Value {i} ({MemberSelectionMenu.GetSignature(member, true)})");
+                    $"Returned Value {i} ({MemberSelectionMenu.GetSignature(member, true, null)})");
 
                 var on = i == linkIndex && linkType == PersistentArgumentType.ReturnValue;
 

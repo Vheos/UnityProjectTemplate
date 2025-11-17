@@ -1,16 +1,16 @@
 {
-  "dependencies": {    
-    "com.vheos.csharp-extended": "https://github.com/Vheos/UnityPackages.git?path=Assets/CSharpExtended",
-    "com.vheos.compact-unity-events": "https://github.com/Vheos/UnityPackages.git?path=Assets/CompactUnityEvents",
-    "com.vheos.value-sources": "https://github.com/Vheos/UnityPackages.git?path=Assets/ValueSources",  
+  "dependencies": {
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.eflatun.scenereference": "https://github.com/starikcetin/Eflatun.SceneReference.git#upm",
     "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+    "com.kandreyc.unity-csharp-patch": "https://github.com/kandreyc/unity-csharp-patch.git#release",
     "com.unity.2d.sprite": "1.0.0",
-    "com.unity.ide.visualstudio": "2.0.23",
-    "com.unity.inputsystem": "1.14.1",
+    "com.unity.ide.visualstudio": "2.0.25",
+    "com.unity.inputsystem": "1.15.0",
     "com.unity.render-pipelines.universal": "17.0.3",
     "com.unity.ugui": "2.0.0",
+    "com.vheos.compact-unity-events": "https://github.com/Vheos/UnityPackages.git?path=Assets/CompactUnityEvents",
+    "com.vheos.csharp-fills": "https://github.com/Vheos/UnityPackages.git?path=Assets/CSharpFills",
     "com.unity.modules.audio": "1.0.0",
     "com.unity.modules.particlesystem": "1.0.0"
   }

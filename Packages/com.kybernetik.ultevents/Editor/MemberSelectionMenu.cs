@@ -1,4 +1,4 @@
-﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2024 Kybernetik //
+﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2025 Kybernetik //
 
 #if UNITY_EDITOR
 
@@ -23,8 +23,9 @@ namespace UltEvents.Editor
         /************************************************************************************************************************/
 
         /// <summary>
-        /// The drawer state from when the menu was opened which needs to be restored when a method is selected because
-        /// menu items are executed after the frame finishes and the drawer state is cleared.
+        /// The drawer state from when the menu was opened which needs to be restored
+        /// when a method is selected because menu items are executed after the frame
+        /// finishes and the drawer state is cleared.
         /// </summary>
         private static readonly DrawerState
             CachedState = new();
@@ -35,9 +36,13 @@ namespace UltEvents.Editor
         private static readonly StringBuilder
             LabelBuilder = new();
 
+        private static readonly Dictionary<Object, string>
+            TargetToName = new();
+
         // These fields should really be passed around as parameters,
         // but they make all the method signatures annoyingly long
         // so it's easier to just have them here.
+        private static Object _CurrentTarget;
         private static MemberInfo _CurrentMember;
         private static BindingFlags _Bindings;
         private static PickerMenu _Menu;
@@ -51,8 +56,11 @@ namespace UltEvents.Editor
         /// <summary>Opens the menu near the specified `area`.</summary>
         public static void ShowMenu(Rect area)
         {
+            TargetToName.Clear();
+
             CachedState.CopyFrom(DrawerState.Current);
 
+            _CurrentTarget = CachedState.call.Target;
             _CurrentMember = CachedState.call.GetMemberSafe();
             _Bindings = GetBindingFlags();
 
@@ -93,7 +101,7 @@ namespace UltEvents.Editor
                 if (firstTarget == null)
                 {
                     targets = targetObjects;
-                    firstTarget = targets[0];
+                    firstTarget = GetFirst(targets);
                 }
 
                 // Add menu items according to the type of the target.
@@ -222,7 +230,7 @@ namespace UltEvents.Editor
 
         private static Object ValidateTargetsAndGetFirst(Object[] targets)
         {
-            var firstTarget = targets[0];
+            var firstTarget = GetFirst(targets);
             if (firstTarget == null)
                 return null;
 
@@ -247,6 +255,7 @@ namespace UltEvents.Editor
         /************************************************************************************************************************/
 
         private static T[] GetRelatedObjects<T>(Object[] objects, Func<Object, T> getRelatedObject)
+            where T : Object
         {
             var relatedObjects = new T[objects.Length];
 
@@ -254,6 +263,9 @@ namespace UltEvents.Editor
             {
                 relatedObjects[i] = getRelatedObject(objects[i]);
             }
+
+            if (TargetToName.TryGetValue(objects[0], out var name))
+                TargetToName[relatedObjects[0]] = name;
 
             return relatedObjects;
         }
@@ -266,16 +278,18 @@ namespace UltEvents.Editor
 
         private static void PopulateMenuWithStatics(Object[] targets, Type type)
         {
-            var firstTarget = targets[0];
+            var firstTarget = GetFirst(targets);
             var component = firstTarget as Component;
             if (!ReferenceEquals(component, null))
             {
-                var gameObjects = GetRelatedObjects(targets, (target) => (target as Component).gameObject);
+                var gameObjects = GetRelatedObjects(targets, target => (target as Component).gameObject);
                 PopulateMenuForGameObject("", true, gameObjects);
             }
             else
             {
-                PopulateMenuForObject(firstTarget.GetType().GetNameCS(BoolPref.ShowFullTypeNames) + " ->/", targets);
+                var prefix = firstTarget.GetType().GetNameCS(BoolPref.ShowFullTypeNames) + SubMenuSeparator;
+
+                PopulateMenuForObject(prefix, targets);
             }
 
             _Menu.AddSeparator("");
@@ -297,7 +311,7 @@ namespace UltEvents.Editor
             if (putGameObjectInSubMenu)
             {
                 _Menu.AddDisabledItem(header);
-                gameObjectPrefix += "GameObject ->/";
+                gameObjectPrefix += "GameObject" + SubMenuSeparator;
             }
 
             PopulateMenuForObject(gameObjectPrefix, targets);
@@ -308,7 +322,7 @@ namespace UltEvents.Editor
                 _Menu.AddDisabledItem(header);
             }
 
-            var gameObjects = GetRelatedObjects(targets, (target) => target as GameObject);
+            var gameObjects = GetRelatedObjects(targets, target => target as GameObject);
             PopulateMenuForComponents(prefix, gameObjects);
         }
 
@@ -335,7 +349,7 @@ namespace UltEvents.Editor
                 {
                     GetComponent(gameObjects[j], type, typeIndex, out var typeCount, out var targetComponent);
                     if (typeCount <= typeIndex)
-                        goto NextComponent;
+                        return;
 
                     targets[j] = targetComponent;
 
@@ -343,18 +357,21 @@ namespace UltEvents.Editor
                         minTypeCount = typeCount;
                 }
 
-                var name = type.GetNameCS(BoolPref.ShowFullTypeNames) + " ->/";
+                var name = type.GetNameCS(BoolPref.ShowFullTypeNames);
 
                 if (minTypeCount > 1)
-                    name = UltEventUtils.GetPlacementName(typeIndex) + " " + name;
+                    name = $"{UltEventUtils.GetPlacementName(typeIndex)} {name}";
 
-                PopulateMenuForObject(prefix + name, targets);
+                TargetToName.Add(targets[0], name);
+
+                PopulateMenuForObject(prefix + name + SubMenuSeparator, targets);
             }
-
-            NextComponent:;
         }
 
-        private static int GetComponentTypeIndex(Component component, Component[] components, out Type type)
+        private static int GetComponentTypeIndex(
+            Component component,
+            Component[] components,
+            out Type type)
         {
             type = component.GetType();
 
@@ -372,7 +389,12 @@ namespace UltEvents.Editor
             return count;
         }
 
-        private static void GetComponent(GameObject gameObject, Type type, int targetIndex, out int numberOfComponentsOfType, out Component targetComponent)
+        private static void GetComponent(
+            GameObject gameObject,
+            Type type,
+            int targetIndex,
+            out int numberOfComponentsOfType,
+            out Component targetComponent)
         {
             numberOfComponentsOfType = 0;
             targetComponent = null;
@@ -395,7 +417,7 @@ namespace UltEvents.Editor
 
         private static void PopulateMenuForComponent(Object[] targets)
         {
-            var gameObjects = GetRelatedObjects(targets, (target) => (target as Component).gameObject);
+            var gameObjects = GetRelatedObjects(targets, target => (target as Component).gameObject);
 
             PopulateMenuForGameObject("", true, gameObjects);
             _Menu.AddSeparator("");
@@ -409,7 +431,7 @@ namespace UltEvents.Editor
             => PopulateMenuForObject("", targets);
 
         private static void PopulateMenuForObject(string prefix, Object[] targets)
-            => PopulateMenuWithMembers(targets[0].GetType(), _Bindings, prefix, targets);
+            => PopulateMenuWithMembers(GetFirst(targets).GetType(), _Bindings, prefix, targets);
 
         /************************************************************************************************************************/
         #endregion
@@ -417,7 +439,11 @@ namespace UltEvents.Editor
         #region Populate for Types
         /************************************************************************************************************************/
 
-        private static void PopulateMenuWithMembers(Type type, BindingFlags bindings, string prefix, Object[] targets)
+        private static void PopulateMenuWithMembers(
+            Type type,
+            BindingFlags bindings,
+            string prefix,
+            Object[] targets)
         {
             var members = GetSortedMembers(type, bindings);
             var previousDeclaringType = type;
@@ -453,7 +479,7 @@ namespace UltEvents.Editor
                         var baseTypesOf = "Base Types of " + type.GetNameCS();
                         if (BoolPref.SubMenuForBaseTypes)
                         {
-                            prefix += baseTypesOf + " ->/";
+                            prefix += baseTypesOf + SubMenuSeparator;
                         }
                         else
                         {
@@ -479,14 +505,24 @@ namespace UltEvents.Editor
                 {
                     case FieldInfo field:
                         AppendGroupHeader(
-                            prefix, "Fields in ", member.DeclaringType, type, ref firstField, ref firstSeparator);
+                            prefix,
+                            "Fields in ",
+                            member.DeclaringType,
+                            type,
+                            ref firstField,
+                            ref firstSeparator);
 
                         AddSelectFieldItem(prefix, targets, type, field);
                         continue;
 
                     case PropertyInfo property:
                         AppendGroupHeader(
-                            prefix, "Properties in ", member.DeclaringType, type, ref firstProperty, ref firstSeparator);
+                            prefix,
+                            "Properties in ",
+                            member.DeclaringType,
+                            type,
+                            ref firstProperty,
+                            ref firstSeparator);
 
                         AddSelectPropertyItem(prefix, targets, type, property, getter);
                         continue;
@@ -494,7 +530,12 @@ namespace UltEvents.Editor
                     case MethodBase method:
                         {
                             AppendGroupHeader(
-                                prefix, "Methods in ", member.DeclaringType, type, ref firstMethod, ref firstSeparator);
+                                prefix,
+                                "Methods in ",
+                                member.DeclaringType,
+                                type,
+                                ref firstMethod,
+                                ref firstSeparator);
 
                             // Check if the method name matched the previous or next method to group them.
                             if (BoolPref.GroupMethodOverloads)
@@ -534,43 +575,52 @@ namespace UltEvents.Editor
 
         /************************************************************************************************************************/
 
-        private static void AppendGroupHeader(string prefix, string name, Type declaringType, Type currentType, ref bool firstInGroup, ref bool firstSeparator)
+        private static void AppendGroupHeader(
+            string prefix,
+            string name,
+            Type declaringType,
+            Type currentType,
+            ref bool firstInGroup,
+            ref bool firstSeparator)
         {
-            if (firstInGroup)
-            {
-                LabelBuilder.Length = 0;
-                LabelBuilder.Append(prefix);
+            if (!firstInGroup)
+                return;
 
-                if (BoolPref.SubMenuForEachBaseType && declaringType != currentType)
-                    AppendDeclaringTypeSubMenu(LabelBuilder, declaringType, currentType);
+            LabelBuilder.Length = 0;
+            LabelBuilder.Append(prefix);
 
-                if (firstSeparator)
-                    firstSeparator = false;
-                else
-                    _Menu.AddSeparator(LabelBuilder.ToString());
+            if (BoolPref.SubMenuForEachBaseType && declaringType != currentType)
+                AppendDeclaringTypeSubMenu(LabelBuilder, declaringType, currentType);
 
-                LabelBuilder.Append(name);
+            if (firstSeparator)
+                firstSeparator = false;
+            else
+                _Menu.AddSeparator(LabelBuilder.ToString());
 
-                if (BoolPref.SubMenuForEachBaseType)
-                    LabelBuilder.Append(declaringType.GetNameCS());
-                else
-                    LabelBuilder.Append(currentType.GetNameCS());
+            LabelBuilder.Append(name);
 
-                _Menu.AddDisabledItem(LabelBuilder.ToString());
-                firstInGroup = false;
-            }
+            if (BoolPref.SubMenuForEachBaseType)
+                LabelBuilder.Append(declaringType.GetNameCS());
+            else
+                LabelBuilder.Append(currentType.GetNameCS());
+
+            _Menu.AddDisabledItem(LabelBuilder.ToString());
+            firstInGroup = false;
         }
 
-        private static void AppendDeclaringTypeSubMenu(StringBuilder text, Type declaringType, Type currentType)
+        private static void AppendDeclaringTypeSubMenu(
+            StringBuilder text,
+            Type declaringType,
+            Type currentType)
         {
-            if (BoolPref.SubMenuForEachBaseType)
-            {
-                if (BoolPref.SubMenuForRootBaseType || declaringType != currentType)
-                {
-                    text.Append(declaringType.GetNameCS());
-                    text.Append(" ->/");
-                }
-            }
+            if (!BoolPref.SubMenuForEachBaseType)
+                return;
+
+            if (!BoolPref.SubMenuForRootBaseType && declaringType == currentType)
+                return;
+
+            text.Append(declaringType.GetNameCS());
+            text.Append(SubMenuSeparator);
         }
 
         /************************************************************************************************************************/
@@ -589,7 +639,7 @@ namespace UltEvents.Editor
 
             // Non-Public Grouping.
             if (BoolPref.GroupNonPublicMethods && !field.IsPublic)
-                LabelBuilder.Append("Non-Public Fields ->/");
+                LabelBuilder.Append("Non-Public Fields" + SubMenuSeparator);
 
             // Property Type and Name.
             LabelBuilder.Append(field.FieldType.GetNameCS(BoolPref.ShowFullTypeNames));
@@ -627,7 +677,7 @@ namespace UltEvents.Editor
 
             // Non-Public Grouping.
             if (BoolPref.GroupNonPublicMethods && !IsPublic(property))
-                LabelBuilder.Append("Non-Public Properties ->/");
+                LabelBuilder.Append("Non-Public Properties" + SubMenuSeparator);
 
             // Property Type and Name.
             LabelBuilder.Append(property.PropertyType.GetNameCS(BoolPref.ShowFullTypeNames));
@@ -639,6 +689,8 @@ namespace UltEvents.Editor
             if (getter != null) LabelBuilder.Append("get; ");
             if (setter != null) LabelBuilder.Append("set; ");
             LabelBuilder.Append('}');
+
+            AppendTargetName(LabelBuilder, GetFirst(targets), property.DeclaringType);
 
             var label = LabelBuilder.ToString();
             AddSetCallItem(label, defaultMethod, targets);
@@ -662,7 +714,7 @@ namespace UltEvents.Editor
 
             // Non-Public Grouping.
             if (BoolPref.GroupNonPublicMethods && !method.IsPublic)
-                LabelBuilder.Append("Non-Public Methods ->/");
+                LabelBuilder.Append("Non-Public Methods" + SubMenuSeparator);
 
             // Overload Grouping.
             if (methodNameSubMenu)
@@ -670,14 +722,17 @@ namespace UltEvents.Editor
                 LabelBuilder
                     .Append(method.GetReturnType().GetNameCS(BoolPref.ShowFullTypeNames))
                     .Append(' ')
-                    .Append(method.Name)
-                    .Append(" ->/");
+                    .Append(method.Name);
+
+                LabelBuilder.Append(SubMenuSeparator);
 
                 AppendParameters(LabelBuilder, method.GetParameters(), true, true);
+
+                AppendTargetName(LabelBuilder, GetFirst(targets), method.DeclaringType);
             }
             else// Regular Method Signature.
             {
-                LabelBuilder.Append(GetMethodSignature(method, parameters, true));
+                LabelBuilder.Append(GetMethodSignature(method, parameters, true, GetFirst(targets)));
             }
 
             var label = LabelBuilder.ToString();
@@ -691,13 +746,13 @@ namespace UltEvents.Editor
         {
             _Menu.AddItem(
                 label,
-                field == _CurrentMember,
+                field == _CurrentMember && GetFirst(targets) == _CurrentTarget,
                 () =>
                 {
                     DrawerState.Current.CopyFrom(CachedState);
 
                     var i = 0;
-                    CachedState.CallProperty.ModifyValues<PersistentCall>((call) =>
+                    CachedState.CallProperty.ModifyValues<PersistentCall>(call =>
                     {
                         var target = targets != null ? targets[i % targets.Length] : null;
                         call.SetField(field, target, true);
@@ -712,13 +767,13 @@ namespace UltEvents.Editor
         {
             _Menu.AddItem(
                 label,
-                method == _CurrentMember,
+                method == _CurrentMember && GetFirst(targets) == _CurrentTarget,
                 () =>
                 {
                     DrawerState.Current.CopyFrom(CachedState);
 
                     var i = 0;
-                    CachedState.CallProperty.ModifyValues<PersistentCall>((call) =>
+                    CachedState.CallProperty.ModifyValues<PersistentCall>(call =>
                     {
                         var target = targets != null ? targets[i % targets.Length] : null;
                         call.SetMethod(method, target);
@@ -966,7 +1021,8 @@ namespace UltEvents.Editor
             || DrawerState.Current.TryGetLinkable(type, out var linkIndex, out var linkType);
 
         /// <summary>
-        /// Returns true if the type of each of the `parameters` can be represented by a <see cref="PersistentArgument"/>.
+        /// Returns true if the type of each of the `parameters`
+        /// can be represented by a <see cref="PersistentArgument"/>.
         /// </summary>
         public static bool IsSupported(ParameterInfo[] parameters)
         {
@@ -1039,7 +1095,7 @@ namespace UltEvents.Editor
 
         /************************************************************************************************************************/
 
-        public static string GetSignature(MemberInfo member, bool includeParameterNames)
+        public static string GetSignature(MemberInfo member, bool includeParameterNames, Object target)
         {
             if (member == null)
                 return null;
@@ -1068,7 +1124,8 @@ namespace UltEvents.Editor
         public static string GetMethodSignature(
             MethodBase method,
             ParameterInfo[] parameters,
-            bool includeParameterNames)
+            bool includeParameterNames,
+            Object target)
         {
             if (method == null)
                 return null;
@@ -1082,6 +1139,12 @@ namespace UltEvents.Editor
                 signature = BuildSignature(method, parameters, includeParameterNames);
                 signatureCache.Add(method, signature);
             }
+
+            SignatureBuilder.Length = 0;
+            SignatureBuilder.Append(signature);
+            AppendTargetName(SignatureBuilder, target, method.DeclaringType);
+            signature = SignatureBuilder.ToString();
+            SignatureBuilder.Length = 0;
 
             return signature;
         }
@@ -1155,6 +1218,36 @@ namespace UltEvents.Editor
 
             text.Append(')');
         }
+
+        /************************************************************************************************************************/
+
+        public static void AppendTargetName(
+            StringBuilder text,
+            Object target,
+            Type declaringType)
+        {
+            if (BoolPref.ShowDeclaringTypeNames && (target != null || declaringType != null))
+            {
+                text.Append(" in ");
+                text.Append(target != null && TargetToName.TryGetValue(target, out var name)
+                    ? name
+                    : declaringType.GetNameCS(BoolPref.ShowFullTypeNames));
+            }
+        }
+
+        /************************************************************************************************************************/
+
+        public static string SubMenuSeparator
+            => BoolPref.ShowArrowsForSubMenus
+            ? " ->/"
+            : "/";
+
+        /************************************************************************************************************************/
+
+        public static Object GetFirst(Object[] targets)
+            => targets != null
+            ? targets[0]
+            : null;
 
         /************************************************************************************************************************/
         #endregion

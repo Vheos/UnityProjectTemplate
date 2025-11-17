@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f213ff497e4ff462a77319cf677cf20cc0860ca9"
+      "hash": "73a63b7f672b88f7e9992f6917eb458a8cbb6fa9"
     },
     "com.eflatun.scenereference": {
       "version": "https://github.com/starikcetin/Eflatun.SceneReference.git#upm",
@@ -22,7 +22,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a7c6b49a0141a5bff9b1983e38137522ef61977d"
+      "hash": "34432703a177c97631a4eb1d908f086037c67969"
+    },
+    "com.kandreyc.unity-csharp-patch": {
+      "version": "https://github.com/kandreyc/unity-csharp-patch.git#release",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9a0428fa8f90c66deb13ead57f93dec6808dd4f8"
     },
     "com.kybernetik.ultevents": {
       "version": "file:com.kybernetik.ultevents",
@@ -66,16 +73,16 @@
       "dependencies": {}
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.23",
+      "version": "2.0.25",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.9"
+        "com.unity.test-framework": "1.1.31"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.14.1",
+      "version": "1.15.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -193,21 +200,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "77fca9a48eb86f9f2a9489edde3d2a52840f6880"
+      "hash": "ded487a2cb63113d4b0dc886eb55c48259e1a906"
     },
-    "com.vheos.csharp-extended": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/CSharpExtended",
+    "com.vheos.csharp-fills": {
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/CSharpFills",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "77fca9a48eb86f9f2a9489edde3d2a52840f6880"
-    },
-    "com.vheos.value-sources": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/ValueSources",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "68412ab23b5e5661075557d9c418c3f049a950fb"
+      "hash": "ded487a2cb63113d4b0dc886eb55c48259e1a906"
     },
     "nuget-packages": {
       "version": "file:nuget-packages",

@@ -1,4 +1,4 @@
-﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2024 Kybernetik //
+﻿// UltEvents // https://kybernetik.com.au/ultevents // Copyright 2021-2025 Kybernetik //
 
 #if UNITY_EDITOR
 
@@ -551,7 +551,7 @@ namespace UltEvents.Editor
                 }
                 else if (member != null)
                 {
-                    label = MemberSelectionMenu.GetSignature(member, false);
+                    label = MemberSelectionMenu.GetSignature(member, false, null);
 
                     DoGetSetToggleGUI(ref area, member);
                 }
