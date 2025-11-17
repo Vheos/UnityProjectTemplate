@@ -596,9 +596,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Standalone: DOTWEEN;UNITASK_DOTWEEN_SUPPORT
   additionalCompilerArguments:
-    Standalone:
-    - /langversion:preview
-    - /nullable:enable
+    Standalone: []
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}
@@ -693,7 +691,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 2
+  activeInputHandler: 1
   windowsGamepadBackendHint: 0
   cloudProjectId: 
   framebufferDepthMemorylessMode: 0
