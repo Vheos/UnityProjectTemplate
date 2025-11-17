@@ -35,6 +35,7 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
 *.tmp
 *.user
@@ -74,6 +75,10 @@ crashlytics-build.properties
 
 
 # Rules below have been added on top of the official Unity .gitignore
+
+# Private
+[Pp]rivate/
+[Pp]rivate.meta
 
 # Visual Studio Installer generated file
 *.vsconfig
