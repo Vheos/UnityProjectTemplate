@@ -2,6 +2,7 @@
     "name": "Vheos.UnityProject.Editor",
     "rootNamespace": "Vheos.UnityProject.Editor",
     "references": [
+        "GUID:4d1c33c8f37edbe42bcaf15b46e83588",
         "GUID:c4562ff68f382644d817901fd38d2a4c"
     ],
     "includePlatforms": [
