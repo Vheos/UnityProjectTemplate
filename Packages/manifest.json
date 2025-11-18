@@ -11,7 +11,6 @@
     "com.unity.ugui": "2.0.0",
     "com.vheos.compact-unity-events": "https://github.com/Vheos/UnityPackages.git?path=Assets/CompactUnityEvents",
     "com.vheos.csharp-fills": "https://github.com/Vheos/UnityPackages.git?path=Assets/CSharpFills",
-    "com.unity.modules.audio": "1.0.0",
     "com.unity.modules.particlesystem": "1.0.0"
   }
 }
