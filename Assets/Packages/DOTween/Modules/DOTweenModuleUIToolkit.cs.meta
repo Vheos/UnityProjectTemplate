@@ -1,8 +1,7 @@
 fileFormatVersion: 2
-guid: e944529dcaee98f4e9498d80e541d93e
-timeCreated: 1602593330
-licenseType: Store
+guid: 0c0a6d2683fb84e4193f2aa968264881
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
   defaultReferences: []
   executionOrder: 0
@@ -15,5 +14,5 @@ AssetOrigin:
   productId: 27676
   packageName: DOTween (HOTween v2)
   packageVersion: 1.2.825
-  assetPath: Assets/Packages/DOTween/Modules/DOTweenModuleEPOOutline.cs
+  assetPath: Assets/Packages/DOTween/Modules/DOTweenModuleUIToolkit.cs
   uploadId: 862444

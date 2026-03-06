@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "73a63b7f672b88f7e9992f6917eb458a8cbb6fa9"
+      "hash": "a9e27c03d411d2fca01cc7410c24c97cd77cb539"
     },
     "com.eflatun.scenereference": {
       "version": "https://github.com/starikcetin/Eflatun.SceneReference.git#upm",
@@ -22,14 +22,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "34432703a177c97631a4eb1d908f086037c67969"
+      "hash": "c2af83c9d4f8cdaada9d4a0e94de2f195d8e1d01"
     },
     "com.kandreyc.unity-csharp-patch": {
       "version": "https://github.com/kandreyc/unity-csharp-patch.git#release",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9a0428fa8f90c66deb13ead57f93dec6808dd4f8"
+      "hash": "5efe0855410091a105721c0095d3af32759b1516"
     },
     "com.kybernetik.ultevents": {
       "version": "file:com.kybernetik.ultevents",
@@ -37,14 +37,8 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "com.unity.2d.sprite": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {}
-    },
     "com.unity.burst": {
-      "version": "1.8.25",
+      "version": "1.8.27",
       "depth": 2,
       "source": "registry",
       "dependencies": {
@@ -73,16 +67,16 @@
       "dependencies": {}
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.25",
+      "version": "2.0.27",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.31"
+        "com.unity.test-framework": "1.1.33"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.15.0",
+      "version": "1.18.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -196,18 +190,34 @@
       }
     },
     "com.vheos.compact-unity-events": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/CompactUnityEvents",
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/CompactUnityEvents",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ded487a2cb63113d4b0dc886eb55c48259e1a906"
+      "hash": "dcba164f612c7fafac4defc3239b5ce178026f96"
     },
     "com.vheos.csharp-fills": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/CSharpFills",
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/CSharpFills",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ded487a2cb63113d4b0dc886eb55c48259e1a906"
+      "hash": "dcba164f612c7fafac4defc3239b5ce178026f96"
+    },
+    "com.vheos.miscellaneous": {
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Miscellaneous",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "dcba164f612c7fafac4defc3239b5ce178026f96"
+    },
+    "com.vheos.object-sources": {
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/ObjectSources",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.vheos.miscellaneous": "0.1.0"
+      },
+      "hash": "dcba164f612c7fafac4defc3239b5ce178026f96"
     },
     "nuget-packages": {
       "version": "file:nuget-packages",
@@ -230,12 +240,6 @@
     "com.unity.modules.jsonserialize": {
       "version": "1.0.0",
       "depth": 2,
-      "source": "builtin",
-      "dependencies": {}
-    },
-    "com.unity.modules.particlesystem": {
-      "version": "1.0.0",
-      "depth": 0,
       "source": "builtin",
       "dependencies": {}
     },
