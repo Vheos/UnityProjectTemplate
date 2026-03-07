@@ -189,26 +189,48 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.vheos.architecture": {
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Architecture",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.vheos.object-sources": "0.1.0",
+        "com.vheos.miscellaneous": "0.1.0"
+      },
+      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
+    },
     "com.vheos.compact-unity-events": {
       "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/CompactUnityEvents",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "dcba164f612c7fafac4defc3239b5ce178026f96"
+      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
     },
     "com.vheos.csharp-fills": {
       "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/CSharpFills",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "dcba164f612c7fafac4defc3239b5ce178026f96"
+      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
+    },
+    "com.vheos.managers": {
+      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Managers",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.vheos.object-sources": "0.1.0",
+        "com.vheos.miscellaneous": "0.1.0",
+        "com.unity.inputsystem": "1.18.0",
+        "com.eflatun.scenereference": "4.1.1"
+      },
+      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
     },
     "com.vheos.miscellaneous": {
       "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Miscellaneous",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "dcba164f612c7fafac4defc3239b5ce178026f96"
+      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
     },
     "com.vheos.object-sources": {
       "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/ObjectSources",
@@ -217,7 +239,7 @@
       "dependencies": {
         "com.vheos.miscellaneous": "0.1.0"
       },
-      "hash": "dcba164f612c7fafac4defc3239b5ce178026f96"
+      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
     },
     "nuget-packages": {
       "version": "file:nuget-packages",

@@ -8,8 +8,10 @@
     "com.unity.inputsystem": "1.18.0",
     "com.unity.render-pipelines.universal": "17.0.3",
     "com.unity.ugui": "2.0.0",
+    "com.vheos.architecture": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Architecture",
     "com.vheos.compact-unity-events": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/CompactUnityEvents",
     "com.vheos.csharp-fills": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/CSharpFills",
+    "com.vheos.managers": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Managers",
     "com.vheos.miscellaneous": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Miscellaneous",
     "com.vheos.object-sources": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/ObjectSources"
   }
