@@ -120,8 +120,3 @@ InitTestScene*.unity*
 
 # Auto-completion for UXML files
 /UIElementsSchema/
-
-# Everything in Packages except main Unity jsons
-/Packages/*
-!/Packages/manifest.json
-!/Packages/packages-lock.json
