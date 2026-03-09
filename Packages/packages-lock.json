@@ -190,31 +190,31 @@
       }
     },
     "com.vheos.architecture": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Architecture",
+      "version": "https://github.com/Vheos/UnitySdk.git?path=Assets/UnitySdk/Architecture",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.vheos.object-sources": "0.1.0",
         "com.vheos.miscellaneous": "0.1.0"
       },
-      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
+      "hash": "dcf7dcde4b191f1d9ebe99571817ad7e8368779f"
     },
     "com.vheos.compact-unity-events": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/CompactUnityEvents",
+      "version": "https://github.com/Vheos/UnitySdk.git?path=Assets/UnitySdk/CompactUnityEvents",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
+      "hash": "dcf7dcde4b191f1d9ebe99571817ad7e8368779f"
     },
     "com.vheos.csharp-fills": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/CSharpFills",
+      "version": "https://github.com/Vheos/UnitySdk.git?path=Assets/UnitySdk/CSharpFills",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
+      "hash": "dcf7dcde4b191f1d9ebe99571817ad7e8368779f"
     },
     "com.vheos.managers": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Managers",
+      "version": "https://github.com/Vheos/UnitySdk.git?path=Assets/UnitySdk/Managers",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -223,23 +223,23 @@
         "com.unity.inputsystem": "1.18.0",
         "com.eflatun.scenereference": "4.1.1"
       },
-      "hash": "c32700177dbaf8514f1ab58d48ad805d73567465"
+      "hash": "dcf7dcde4b191f1d9ebe99571817ad7e8368779f"
     },
     "com.vheos.miscellaneous": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/Miscellaneous",
+      "version": "https://github.com/Vheos/UnitySdk.git?path=Assets/UnitySdk/Miscellaneous",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
+      "hash": "dcf7dcde4b191f1d9ebe99571817ad7e8368779f"
     },
     "com.vheos.object-sources": {
-      "version": "https://github.com/Vheos/UnityPackages.git?path=Assets/UnityPackages/ObjectSources",
+      "version": "https://github.com/Vheos/UnitySdk.git?path=Assets/UnitySdk/ObjectSources",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.vheos.miscellaneous": "0.1.0"
       },
-      "hash": "9c2bc06f8d051103c0e35d0960ff308e0b395897"
+      "hash": "dcf7dcde4b191f1d9ebe99571817ad7e8368779f"
     },
     "nuget-packages": {
       "version": "file:nuget-packages",
